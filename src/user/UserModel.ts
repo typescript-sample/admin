@@ -6,29 +6,42 @@ export const userModel: Model = {
   attributes: {
     userId: {
       key: true,
-      match: 'equal'
+      match: 'equal',
+      length: 40
     },
     username: {
-      required: true
+      required: true,
+      length: 255
     },
     email: {
       format: 'email',
-      required: true
+      required: true,
+      length: 120
     },
-    displayName: {},
+    displayName: {
+      length: 120
+    },
     status: {
-      match: 'equal'
+      match: 'equal',
+      length: 1
     },
     gender: {
       length: 1
     },
     phone: {
       format: 'phone',
-      required: true
+      required: true,
+      length: 14
     },
-    title: {},
-    position: {},
-    imageURL: {},
+    title: {
+      length: 10
+    },
+    position: {
+      length: 10
+    },
+    imageURL: {
+      length: 255
+    },
     createdBy: {},
     createdAt: {
       type: 'datetime'

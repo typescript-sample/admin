@@ -5,15 +5,20 @@ export const roleModel: Model = {
   source: 'roles',
   attributes: {
     roleId: {
-      key: true
+      key: true,
+      length: 40
     },
     roleName: {
-      required: true
+      required: true,
+      length: 255
     },
     status: {
-      match: 'equal'
+      match: 'equal',
+      length: 1
     },
-    remark: {},
+    remark: {
+      length: 255
+    },
     createdBy: {},
     createdAt: {
       type: 'datetime'

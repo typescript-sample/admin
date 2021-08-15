@@ -1,7 +1,8 @@
-import {HealthController} from 'express-ext';
+import {HealthController, resources} from 'express-ext';
 import {Pool} from 'mysql';
 import {MySQLChecker, param, PoolManager} from 'mysql-core';
 import {mysql, SearchBuilder} from 'query-core';
+import { createValidator } from 'validator-x';
 import {ApplicationContext} from './context';
 import {Role, RoleController, roleModel, RoleSM, SqlRoleService} from './role';
 import {SqlUserService, User, UserController, userModel, UserSM} from './user';
@@ -9,6 +10,7 @@ import {SqlUserService, User, UserController, userModel, UserSM} from './user';
 export function log(msg: string, ctx?: any): void {
   console.log(msg);
 }
+resources.createValidator = createValidator;
 export function createContext(pool: Pool): ApplicationContext {
   const sqlChecker = new MySQLChecker(pool);
   const health = new HealthController([sqlChecker]);
