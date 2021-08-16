@@ -52,6 +52,10 @@ export const userModel: Model = {
     },
     lastLogin: {
       type: 'datetime'
+    },
+    roles: {
+      type: 'primitives',
+      ignored: true
     }
   }
 };

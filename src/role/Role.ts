@@ -3,4 +3,5 @@ export interface Role {
   roleName: string;
   status?: string;
   remark?: string;
+  privileges?: string[];
 }

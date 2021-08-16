@@ -11,19 +11,29 @@ dotenv.config();
 const app = express();
 
 const port = process.env.PORT;
+const password = process.env.PASSWORD;
 
 app.use(json());
 
 const pool = mysql.createPool({
-  host: 'localhost',
-  user: 'devadmin',
-  password: 'abcd1234',
+  host: '127.0.0.1',
+  port: 3306,
+  user: 'root',
+  password: password,
   database: 'backoffice5',
   multipleStatements: true,
 });
 
-const ctx = createContext(pool);
-route(app, ctx);
-http.createServer(app).listen(port, () => {
-  console.log('Start server at port ' + port);
+pool.getConnection((err, conn) => {
+  if (err) {
+    console.error('Failed to connect to MySQL.', err.message, err.stack);
+  }
+  if (conn) {
+    const ctx = createContext(pool);
+    route(app, ctx);
+    http.createServer(app).listen(port, () => {
+      console.log('Start server at port ' + port);
+    });
+    console.log('Connected successfully to MySQL.');
+  }
 });

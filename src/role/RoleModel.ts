@@ -26,6 +26,10 @@ export const roleModel: Model = {
     updatedBy: {},
     updatedAt: {
       type: 'datetime'
+    },
+    privileges: {
+      type: 'primitives',
+      ignored: true
     }
   }
 };

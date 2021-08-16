@@ -4,4 +4,5 @@ export interface User {
   email?: string;
   phone?: string;
   dateOfBirth?: Date;
+  roles?: string[];
 }

@@ -12,7 +12,7 @@ export class RoleController extends GenericSearchHandler<Role, string, RoleSM> {
 
   all(req: Request, res: Response) {
     this.roleService.all()
-      .then(users => res.status(200).json(users))
+      .then(roles => res.status(200).json(roles))
       .catch(err => handleError(err, res, this.log));
   }
 }

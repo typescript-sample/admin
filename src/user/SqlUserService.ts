@@ -1,9 +1,24 @@
-
 import {Attributes} from 'express-ext';
-import {Attribute, buildMap, buildToDelete, buildToInsert, buildToUpdate, keys, select, Statement, StringMap} from 'query-core';
+import {Attribute, buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, keys, Model, select, Statement, StringMap} from 'query-core';
 import {User} from './User';
 import {userModel} from './UserModel';
 
+export const userRoleModel: Model = {
+  name: 'userRole',
+  source: 'userRoles',
+  attributes: {
+    userId: {
+      key: true
+    },
+    roleId: {
+      key: true
+    },
+  }
+};
+export interface UserRole {
+  userId?: string;
+  roleId?: string;
+}
 export class SqlUserService {
   private keys: Attribute[];
   private map: StringMap;
@@ -32,22 +47,56 @@ export class SqlUserService {
   load(id: string): Promise<User> {
     const stmt = select(id, 'users', this.keys, this.param);
     return this.query<User>(stmt.query, stmt.params, this.map)
-      .then(r => r && r.length > 0 ? r[0] : null);
+      .then(users => {
+        if (!users || users.length === 0) {
+          return null;
+        }
+        const user = users[0];
+        const q = `select roleId as id from userRoles where userId = ${this.param(1)}`;
+        return this.query(q, [user.userId]).then(roles => {
+          if (roles && roles.length > 0) {
+            user.roles = roles.map(i => i['id']);
+          }
+          return user;
+        });
+      });
   }
   insert(user: User): Promise<number> {
+    const stmts: Statement[] = [];
     const stmt = buildToInsert(user, 'users', userModel.attributes, this.param);
-    return this.exec(stmt.query, stmt.params);
+    stmts.push(stmt);
+    insertUserRoles(stmts, user.userId, user.roles, this.param);
+    return this.execBatch(stmts);
   }
   update(user: User): Promise<number> {
+    const stmts: Statement[] = [];
     const stmt = buildToUpdate(user, 'users', userModel.attributes, this.param);
+    const query = `delete from userRoles where userId = ${this.param(1)}`;
+    stmts.push({query, params: [user.userId]});
+    insertUserRoles(stmts, user.userId, user.roles, this.param);
     return this.exec(stmt.query, stmt.params);
   }
   patch(user: User): Promise<number> {
-    const stmt = buildToUpdate(user, 'users', userModel.attributes, this.param);
-    return this.exec(stmt.query, stmt.params);
+    return this.update(user);
   }
   delete(id: string): Promise<number> {
+    const stmts: Statement[] = [];
     const stmt = buildToDelete(id, 'users', this.keys, this.param);
-    return this.exec(stmt.query, stmt.params);
+    stmts.push(stmt);
+    const query = `delete from userRoles where userId = ${this.param(1)}`;
+    stmts.push({query, params: [id]});
+    return this.execBatch(stmts);
   }
+}
+
+function insertUserRoles(stmts: Statement[], userId: string, roles: string[], param: (i: number) => string): Statement[] {
+  if (roles && roles.length > 0) {
+    const userRoles = roles.map<UserRole>(i => {
+      const userRole: UserRole = {userId, roleId: i};
+      return userRole;
+    });
+    const stmt = buildToInsertBatch(userRoles, 'userRoles', userRoleModel.attributes, param);
+    stmts.push(stmt);
+  }
+  return stmts;
 }
