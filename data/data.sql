@@ -63,6 +63,7 @@ CREATE TABLE auditlog (
   status varchar(255),
   remark varchar(255)
 );
+
 INSERT INTO modules (moduleid,modulename,status,path,resourcekey,icon,sequence,parent) VALUES ('dashboard','Dashboard','A','/dashboard','dashboard','assignments',1,'');
 INSERT INTO modules (moduleid,modulename,status,path,resourcekey,icon,sequence,parent) VALUES ('admin','Admin','A','/admin','admin','contacts',2,'');
 INSERT INTO modules (moduleid,modulename,status,path,resourcekey,icon,sequence,parent) VALUES ('setup','Setup','A','/setup','setup','settings',3,'');
@@ -130,6 +131,7 @@ INSERT INTO userroles(userid, roleid) VALUES ('00010','call_center');
 INSERT INTO userroles(userid, roleid) VALUES ('00011','it_support');
 INSERT INTO userroles(userid, roleid) VALUES ('00012','call_center');
 INSERT INTO userroles(userid, roleid) VALUES ('00012','it_support');
+
 /*
 ALTER TABLE userroles ADD FOREIGN KEY (userid) REFERENCES users (userid);
 ALTER TABLE userroles ADD FOREIGN KEY (roleid) REFERENCES roles (roleid);

@@ -4,5 +4,6 @@ export interface User {
   email?: string;
   phone?: string;
   dateOfBirth?: Date;
+  imageUrl?: string;
   roles?: string[];
 }

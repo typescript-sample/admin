@@ -1,7 +1,10 @@
 import {Application} from 'express';
+import multer from 'multer';
 import {ApplicationContext} from './context';
 
 export function route(app: Application, ctx: ApplicationContext): void {
+  const upload = multer();
+  
   app.get('/health', ctx.health.check);
 
   app.get('/roles', ctx.role.all);
@@ -20,4 +23,14 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.put('/users/:id', ctx.user.update);
   app.patch('/users/:id', ctx.user.patch);
   app.delete('/users/:id', ctx.user.delete);
+
+  app.get('/uploads', ctx.uploads.all);
+  app.get('/uploads/:id', ctx.uploads.load);
+  app.post('/uploads', upload.single('file'), ctx.uploads.upload);
+  app.post('/uploads/youtube', ctx.uploads.insertData);
+  app.delete('/uploads', ctx.uploads.remove);
+  app.delete('/uploads/youtube', ctx.uploads.deleteData);
+
+  app.patch('/uploads', ctx.uploads.updateData);
+  app.get('/image/users/:id', ctx.uploads.getImageUser);
 }
