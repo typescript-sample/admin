@@ -1,14 +1,14 @@
 import { Storage } from '@google-cloud/storage';
-import {HealthController, resources, SearchConfig} from 'express-ext';
-import {Pool} from 'pg';
-import {PoolManager, PostgreSQLChecker, param} from 'postgre'
-import {mysql, SearchBuilder} from 'query-core';
+import { HealthController, resources, SearchConfig } from 'express-ext';
+import { Pool } from 'pg';
+import { PoolManager, PostgreSQLChecker, param } from 'postgre'
+import { mysql, SearchBuilder } from 'query-core';
 import { SqlUploadSerive } from './uploads/SqlUploadsService';
 import { UploadController } from './uploads/UploadController';
 import { createValidator } from 'validator-x';
-import {ApplicationContext} from './context';
-import {Role, RoleController, roleModel, RoleSM, SqlRoleService} from './role';
-import {SqlUserService, User, UserController, userModel, UserSM} from './user';
+import { ApplicationContext } from './context';
+import { Role, RoleController, roleModel, RoleSM, SqlRoleService } from './role';
+import { SqlUserService, User, UserController, userModel, UserSM } from './user';
 import { GoogleStorageService, map, StorageConfig } from 'google-storage';
 
 
@@ -34,11 +34,11 @@ export function createContext(pool: Pool): ApplicationContext {
   const sqlChecker = new PostgreSQLChecker(pool);
   const health = new HealthController([sqlChecker]);
   const manager = new PoolManager(pool);
-  const config: SearchConfig = {list: 'results'};
+  const config: SearchConfig = { list: 'results' };
 
   const roleService = new SqlRoleService(param, manager.query, manager.exec, manager.execBatch);
   const roleSearch = new SearchBuilder<Role, RoleSM>(manager.query, 'roles', roleModel.attributes, mysql);
-  const role = new RoleController(log, roleSearch.search, roleService);
+  const role = new RoleController(log, roleSearch.search, roleService, config);
 
   const userService = new SqlUserService(param, manager.query, manager.exec, manager.execBatch);
   const userSearch = new SearchBuilder<User, UserSM>(manager.query, 'users', userModel.attributes, mysql);
@@ -54,21 +54,8 @@ export function createContext(pool: Pool): ApplicationContext {
 
 
   const uploadService = new SqlUploadSerive(pool, param, manager.query, manager.exec, manager.execBatch);
-  const uploads = new UploadController (log, storageService, 'media', uploadService);
-  const ctx: ApplicationContext = {health, role, user,  uploads};
+  const uploads = new UploadController(log, storageService, 'media', uploadService);
+  const ctx: ApplicationContext = { health, role, user, uploads };
 
   return ctx;
 }
-
-export async function listBuckets(storage: Storage) {
-  try {
-    const results = await storage.getBuckets();
-    const [buckets] = results;
-    console.log('Buckets:');
-    buckets.forEach(bucket => {
-      console.log(bucket.name);
-    });
-  } catch (err) {
-    console.error('ERROR:', err);
-  }
-};
