@@ -1,22 +1,24 @@
-import { Pool, PoolClient } from 'pg';
-import {Attribute, Statement, StringMap, select} from 'query-core';
-import {save} from 'postgre'
+// import { Pool, PoolClient } from 'pg';
+import { Attribute, Statement, StringMap, select } from 'query-core';
+// import {save} from 'postgre';
+import { Database } from 'sqlite3';
+import { save } from 'sqlite3-core';
 import { FileUploads, Uploads } from 'uploads';
-import {uploadModel} from './UploadModel'
+import { uploadModel } from './UploadModel'
 import { User } from 'user';
 
 export class SqlUploadSerive {
   private map: StringMap;
   private keys: Attribute[];
-  protected client: PoolClient;
+  // protected client: PoolClient;
   constructor(
-    pool: Pool,
+    private pool: Database,
     public param: (i: number) => string,
     public query: <T>(sql: string, args?: any[], m?: StringMap, bools?: Attribute[]) => Promise<T[]>,
     public exec: (sql: string, args?: any[]) => Promise<number>,
     public execBatch?: (statements: Statement[]) => Promise<number>,
   ) {
-    pool.connect().then(client => this.client = client);
+    // pool.connect().then(client => this.client = client);
     this.all = this.all.bind(this);
     this.insert = this.insert.bind(this);
     this.load = this.load.bind(this);
@@ -27,7 +29,7 @@ export class SqlUploadSerive {
     return this.query<Uploads>('select * from uploads order by userid asc', undefined, this.map);
   }
   insert(upload: Uploads): Promise<number> {
-    return save(this.client, upload, 'uploads', uploadModel.attributes);
+    return save(this.pool, upload, 'uploads', uploadModel.attributes);
   }
   load(id: string): Promise<Uploads> {
     return this.query<Uploads>('select * from uploads where userid = $1', [id]).then((uploads) => {
@@ -51,8 +53,8 @@ export class SqlUploadSerive {
   }
   updateData(data: FileUploads[], userId: string): Promise<number> {
     const imageUrl = data.filter(d => d.type === 'image')[0].url;
-    const statementData: Statement = {query: 'update uploads set data = $1 where userid = $2', params:[data, userId]};
-    const statementUser: Statement = {query: 'update users set imageurl = $1 where userid = $2', params:[imageUrl, userId]};
+    const statementData: Statement = { query: 'update uploads set data = $1 where userid = $2', params: [data, userId] };
+    const statementUser: Statement = { query: 'update users set imageurl = $1 where userid = $2', params: [imageUrl, userId] };
     return this.execBatch([statementData, statementUser]).then(r => r).catch(e => {
       console.log(e);
       return e;

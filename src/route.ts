@@ -1,10 +1,10 @@
-import {Application} from 'express';
+import { Application } from 'express';
 import multer from 'multer';
-import {ApplicationContext} from './context';
+import { ApplicationContext } from './context';
 
 export function route(app: Application, ctx: ApplicationContext): void {
   const upload = multer();
-  
+
   app.get('/health', ctx.health.check);
 
   app.get('/roles', ctx.role.all);

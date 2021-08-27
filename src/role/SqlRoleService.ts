@@ -1,8 +1,8 @@
 
-import {Attributes} from 'express-ext';
-import {Attribute, buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, keys, Model, select, Statement, StringMap} from 'query-core';
-import {Role} from './Role';
-import {roleModel} from './RoleModel';
+import { Attributes } from 'express-ext';
+import { Attribute, buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, keys, Model, select, Statement, StringMap } from 'query-core';
+import { Role } from './Role';
+import { roleModel } from './RoleModel';
 
 export const roleModuleModel: Model = {
   name: 'userRole',
@@ -49,6 +49,7 @@ export class SqlRoleService {
     return roleModel.attributes;
   }
   all(): Promise<Role[]> {
+    console.log(this.param);
     return this.query<Role>('select * from roles order by roleId asc', undefined, this.map);
   }
   load(id: string): Promise<Role> {
@@ -80,7 +81,7 @@ export class SqlRoleService {
     const stmt = buildToUpdate(role, 'roles', roleModel.attributes, this.param);
     stmts.push(stmt);
     const query = `delete from roleModules where roleId = ${this.param(1)}`;
-    stmts.push({query, params: [role.roleId]});
+    stmts.push({ query, params: [role.roleId] });
     insertRoleModules(stmts, role.roleId, role.privileges, this.param);
     return this.execBatch(stmts);
   }
@@ -92,7 +93,7 @@ export class SqlRoleService {
     const stmt = buildToDelete(id, 'roles', this.keys, this.param);
     stmts.push(stmt);
     const query = `delete from roleModules where userId = ${this.param(1)}`;
-    stmts.push({query, params: [id]});
+    stmts.push({ query, params: [id] });
     return this.execBatch(stmts);
   }
 }
@@ -107,7 +108,7 @@ function insertRoleModules(stmts: Statement[], roleId: string, privileges: strin
           permissions = 0;
         }
       }
-      const ms: Module = {roleId, moduleId: i, permissions};
+      const ms: Module = { roleId, moduleId: i, permissions };
       return ms;
     });
     const stmt = buildToInsertBatch(modules, 'roleModules', roleModuleModel.attributes, param);

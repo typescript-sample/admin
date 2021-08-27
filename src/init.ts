@@ -1,7 +1,9 @@
 import { Storage } from '@google-cloud/storage';
 import { HealthController, resources, SearchConfig } from 'express-ext';
-import { Pool } from 'pg';
-import { PoolManager, PostgreSQLChecker, param } from 'postgre'
+// import { Pool } from 'pg';
+// import { PoolManager, PostgreSQLChecker, param } from 'postgre';
+import { Database } from 'sqlite3';
+import { PoolManager, SQLiteChecker } from 'sqlite3-core';
 import { mysql, SearchBuilder } from 'query-core';
 import { SqlUploadSerive } from './uploads/SqlUploadsService';
 import { UploadController } from './uploads/UploadController';
@@ -29,9 +31,12 @@ const credentials = {
 export function log(msg: string, ctx?: any): void {
   console.log(msg);
 }
+export function param(i: number): string {
+  return '$' + i;
+}
 resources.createValidator = createValidator;
-export function createContext(pool: Pool): ApplicationContext {
-  const sqlChecker = new PostgreSQLChecker(pool);
+export function createContext(pool: Database): ApplicationContext {
+  const sqlChecker = new SQLiteChecker(pool);
   const health = new HealthController([sqlChecker]);
   const manager = new PoolManager(pool);
   const config: SearchConfig = { list: 'results' };
@@ -49,8 +54,6 @@ export function createContext(pool: Pool): ApplicationContext {
   const storage = new Storage({ credentials });
   const bucket = storage.bucket('go-firestore-rest-api.appspot.com');
   const storageService = new GoogleStorageService(bucket, storageConfig, map);
-
-  // listBuckets(storage);
 
 
   const uploadService = new SqlUploadSerive(pool, param, manager.query, manager.exec, manager.execBatch);
