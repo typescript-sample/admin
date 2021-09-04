@@ -1,11 +1,11 @@
 // import { Pool, PoolClient } from 'pg';
-import { Attribute, Statement, StringMap, select } from 'query-core';
+import { Attribute, Statement, StringMap } from 'query-core';
 // import {save} from 'postgre';
 import { Database } from 'sqlite3';
 import { save } from 'sqlite3-core';
 import { FileUploads, Uploads } from 'uploads';
-import { uploadModel } from './UploadModel'
 import { User } from 'user';
+import { uploadModel } from './UploadModel';
 
 export class SqlUploadSerive {
   private map: StringMap;

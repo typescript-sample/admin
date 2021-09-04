@@ -1,4 +1,4 @@
-import {Model} from 'query-core';
+import { Model } from 'query-core';
 
 export const uploadModel: Model = {
   name: 'upload',
@@ -10,7 +10,7 @@ export const uploadModel: Model = {
       length: 40
     },
     data: {
-      type: 'primitives'
+      type: 'array'
     },
   }
 };

@@ -1,9 +1,9 @@
-import e, {Request, Response} from 'express';
-import { StorageService } from 'google-storage';
+import e, { Request, Response } from 'express';
 import {handleError} from 'express-ext';
-import { UploadSerive } from './UploadSerivce';
-import {getFileName} from './utils';
+import { StorageService } from 'google-storage';
 import { FileUploads, Uploads } from 'uploads';
+import { UploadSerive } from './UploadSerivce';
+import { getFileName } from './utils';
 
 export class UploadController {
   constructor(private log: (msg: string, ctx?: any) => void, private storageService: StorageService, private directory: string, private uploadService: UploadSerive) {

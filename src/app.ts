@@ -2,9 +2,9 @@ import { json, urlencoded } from 'body-parser';
 import dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
 import http from 'http';
-import { createContext } from './init';
 // import { Pool } from 'pg';
 import sqlite3 from 'sqlite3';
+import { createContext } from './init';
 import { route } from './route';
 
 dotenv.config();

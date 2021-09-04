@@ -81,10 +81,10 @@ export class SqlUserService {
   }
   delete(id: string): Promise<number> {
     const stmts: Statement[] = [];
-    const stmt = buildToDelete(id, 'users', this.keys, this.param);
-    stmts.push(stmt);
     const query = `delete from userRoles where userId = ${this.param(1)}`;
     stmts.push({query, params: [id]});
+    const stmt = buildToDelete(id, 'users', this.keys, this.param);
+    stmts.push(stmt);
     return this.execBatch(stmts);
   }
 }

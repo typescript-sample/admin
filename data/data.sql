@@ -1,5 +1,5 @@
 CREATE TABLE modules (
-  moduleid varchar(40) PRIMARY KEY,
+  moduleid varchar(40) primary key,
   modulename varchar(255) not null,
   status char(1) not null,
   path varchar(255),
@@ -14,7 +14,7 @@ CREATE TABLE modules (
 );
 
 CREATE TABLE users (
-  userid varchar(40) PRIMARY KEY,
+  userid varchar(40) primary key,
   username varchar(255) not null,
   email varchar(255) not null,
   displayname varchar(255) not null,
@@ -32,7 +32,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE roles (
-  roleid varchar(40) PRIMARY KEY,
+  roleid varchar(40) primary key,
   rolename varchar(255) not null,
   status char(1) not null,
   remark varchar(255),
@@ -44,17 +44,17 @@ CREATE TABLE roles (
 CREATE TABLE userroles (
   userid varchar(40) not null,
   roleid varchar(40) not null,
-  PRIMARY KEY (userid, roleid)
+  primary key (userid, roleid)
 );
 CREATE TABLE rolemodules (
   roleid varchar(40) not null,
   moduleid varchar(40) not null,
   permissions int not null,
-  PRIMARY KEY (roleid, moduleid)
+  primary key (roleid, moduleid)
 );
 
 CREATE TABLE auditlog (
-  id varchar(255) PRIMARY KEY,
+  id varchar(255) primary key,
   resourcetype varchar(255),
   userid varchar(255),
   ip varchar(255),
