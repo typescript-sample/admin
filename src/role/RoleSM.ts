@@ -1,4 +1,4 @@
-import {DateRange, SearchModel} from 'express-ext';
+import {SearchModel} from 'express-ext';
 
 export interface RoleSM extends SearchModel {
   roleId?: string;

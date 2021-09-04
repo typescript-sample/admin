@@ -1,4 +1,3 @@
-
 import {Attributes} from 'express-ext';
 import {Attribute, buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, keys, Model, select, Statement, StringMap} from 'query-core';
 import {Role} from './Role';

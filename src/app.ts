@@ -2,8 +2,8 @@ import { json, urlencoded } from 'body-parser';
 import dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
 import http from 'http';
-import { createContext } from './init';
 import { Pool } from 'pg';
+import { createContext } from './init';
 import { route } from './route';
 
 dotenv.config();
@@ -25,8 +25,8 @@ app.use(express.static('public'));
 export const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
-  password: '1234',
-  database: 'backoffice5',
+  password: 'abcd1234',
+  database: 'admin',
   port: 5432
 });
 
@@ -38,6 +38,6 @@ pool.connect().then(() => {
   });
   console.log('Connected successfully to PostgreSQL.');
 })
-  .catch(e => {
-    console.error('Failed to connect to PostgreSQL.', e.message, e.stack);
-  });
+.catch(e => {
+  console.error('Failed to connect to PostgreSQL.', e.message, e.stack);
+});

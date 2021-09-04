@@ -1,13 +1,12 @@
 import { Pool, PoolClient } from 'pg';
-import {Attribute, Statement, StringMap, select} from 'query-core';
-import {save} from 'postgre'
+import { save } from 'postgre';
+import { Attribute, Statement, StringMap } from 'query-core';
 import { FileUploads, Uploads } from 'uploads';
-import {uploadModel} from './UploadModel'
 import { User } from 'user';
+import { uploadModel } from './UploadModel';
 
 export class SqlUploadSerive {
   private map: StringMap;
-  private keys: Attribute[];
   protected client: PoolClient;
   constructor(
     pool: Pool,
@@ -38,7 +37,7 @@ export class SqlUploadSerive {
       }
     }).catch(e => {
       console.log(e);
-      return e;
+      throw e;
     });
   }
   getUser(id: string): Promise<User> {
@@ -46,16 +45,16 @@ export class SqlUploadSerive {
       return res[0];
     }).catch(e => {
       console.log(e);
-      return e;
+      throw e;
     });
   }
   updateData(data: FileUploads[], userId: string): Promise<number> {
     const imageUrl = data.filter(d => d.type === 'image')[0].url;
-    const statementData: Statement = {query: 'update uploads set data = $1 where userid = $2', params:[data, userId]};
-    const statementUser: Statement = {query: 'update users set imageurl = $1 where userid = $2', params:[imageUrl, userId]};
+    const statementData: Statement = { query: 'update uploads set data = $1 where userid = $2', params: [data, userId] };
+    const statementUser: Statement = { query: 'update users set imageurl = $1 where userid = $2', params: [imageUrl, userId] };
     return this.execBatch([statementData, statementUser]).then(r => r).catch(e => {
       console.log(e);
-      return e;
+      throw e;
     });
   }
 }

@@ -1,7 +1,7 @@
-import {HealthController} from 'express-ext';
+import { HealthController } from 'express-ext';
 import { UploadController } from 'uploads/UploadController';
-import {RoleController} from './role';
-import {UserController} from './user';
+import { RoleController } from './role';
+import { UserController } from './user';
 
 export interface ApplicationContext {
   health: HealthController;
