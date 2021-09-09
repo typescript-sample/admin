@@ -6,4 +6,5 @@ export interface RoleService {
   insert(user: Role): Promise<number>;
   update(user: Role): Promise<number>;
   delete(id: string): Promise<number>;
+  assign(id: string, users: string[]): Promise<number>;
 }

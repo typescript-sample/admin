@@ -6,4 +6,5 @@ export interface UserService {
   insert(user: User): Promise<number>;
   update(user: User): Promise<number>;
   delete(id: string): Promise<number>;
+  getUsersOfRole(roleId: string): Promise<User[]>;
 }

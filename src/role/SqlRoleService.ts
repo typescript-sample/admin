@@ -1,9 +1,24 @@
-
 import {Attributes} from 'express-ext';
 import {Attribute, buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, keys, Model, select, Statement, StringMap} from 'query-core';
 import {Role} from './Role';
 import {roleModel} from './RoleModel';
 
+export interface UserRole {
+  userId?: string;
+  roleId?: string;
+}
+export const userRoleModel: Model = {
+  name: 'userRole',
+  source: 'userRoles',
+  attributes: {
+    userId: {
+      key: true
+    },
+    roleId: {
+      key: true
+    },
+  }
+};
 export const roleModuleModel: Model = {
   name: 'userRole',
   source: 'userRoles',
@@ -93,6 +108,17 @@ export class SqlRoleService {
     stmts.push(stmt);
     const query = `delete from roleModules where userId = ${this.param(1)}`;
     stmts.push({query, params: [id]});
+    return this.execBatch(stmts);
+  }
+  assign(roleId: string, users: string[]): Promise<number> {
+    const userRoles: UserRole[] = users.map<UserRole>(u => {
+      return {roleId, userId: u};
+    });
+    const stmts: Statement[] = [];
+    const q1 = `delete from userRoles where roleId = ${this.param(1)}`;
+    stmts.push({query: q1, params: [roleId]});
+    const s = buildToInsertBatch<UserRole>(userRoles, 'userRoles', userRoleModel.attributes, this.param);
+    stmts.push(s);
     return this.execBatch(stmts);
   }
 }

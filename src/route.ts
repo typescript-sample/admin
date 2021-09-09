@@ -4,6 +4,9 @@ import {ApplicationContext} from './context';
 export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/health', ctx.health.check);
 
+  app.get('/roles/:id/users', ctx.user.getUsersOfRole);
+  app.put('/roles/:id/assign', ctx.role.assign);
+
   app.get('/roles', ctx.role.all);
   app.post('/roles/search', ctx.role.search);
   app.get('/roles/search', ctx.role.search);

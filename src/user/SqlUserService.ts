@@ -41,6 +41,18 @@ export class SqlUserService {
   metadata(): Attributes {
     return userModel.attributes;
   }
+  getUsersOfRole(roleId: string): Promise<User[]> {
+    if (!roleId || roleId.length === 0) {
+      return Promise.resolve([]);
+    }
+    const q = `
+      select u.*
+      from userRoles ur
+        inner join users u on u.userId = ur.userId
+      where ur.roleId = ${this.param(1)}
+      order by userId`;
+    return this.query(q, [roleId], this.map);
+  }
   all(): Promise<User[]> {
     return this.query<User>('select * from users order by userId asc', undefined, this.map);
   }
@@ -81,10 +93,10 @@ export class SqlUserService {
   }
   delete(id: string): Promise<number> {
     const stmts: Statement[] = [];
-    const stmt = buildToDelete(id, 'users', this.keys, this.param);
-    stmts.push(stmt);
     const query = `delete from userRoles where userId = ${this.param(1)}`;
     stmts.push({query, params: [id]});
+    const stmt = buildToDelete(id, 'users', this.keys, this.param);
+    stmts.push(stmt);
     return this.execBatch(stmts);
   }
 }
