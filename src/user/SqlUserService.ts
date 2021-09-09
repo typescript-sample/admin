@@ -1,7 +1,8 @@
 import {Attributes} from 'express-ext';
-import {Attribute, buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, keys, Model, select, Statement, StringMap} from 'query-core';
+import {Attribute, buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, keys, Model, SearchResult, select, Statement, StringMap} from 'query-core';
 import {User} from './User';
 import {userModel} from './UserModel';
+import {UserSM} from './UserSM';
 
 export const userRoleModel: Model = {
   name: 'userRole',
@@ -23,12 +24,14 @@ export class SqlUserService {
   private keys: Attribute[];
   private map: StringMap;
   constructor(
+    protected find: (s: UserSM, limit?: number, offset?: number|string, fields?: string[]) => Promise<SearchResult<User>>,
     public param: (i: number) => string,
     public query: <T>(sql: string, args?: any[], m?: StringMap, bools?: Attribute[]) => Promise<T[]>,
     public exec: (sql: string, args?: any[]) => Promise<number>,
     public execBatch?: (statements: Statement[]) => Promise<number>
   ) {
     this.metadata = this.metadata.bind(this);
+    this.search = this.search.bind(this);
     this.all = this.all.bind(this);
     this.load = this.load.bind(this);
     this.insert = this.insert.bind(this);
@@ -52,6 +55,9 @@ export class SqlUserService {
       where ur.roleId = ${this.param(1)}
       order by userId`;
     return this.query(q, [roleId], this.map);
+  }
+  search(s: UserSM, limit?: number, offset?: number|string, fields?: string[]): Promise<SearchResult<User>> {
+    return this.find(s, limit, offset, fields);
   }
   all(): Promise<User[]> {
     return this.query<User>('select * from users order by userId asc', undefined, this.map);

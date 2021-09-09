@@ -1,7 +1,8 @@
 import {Attributes} from 'express-ext';
-import {Attribute, buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, keys, Model, select, Statement, StringMap} from 'query-core';
+import {Attribute, buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, keys, Model, SearchResult, select, Statement, StringMap} from 'query-core';
 import {Role} from './Role';
 import {roleModel} from './RoleModel';
+import {RoleSM} from './RoleSM';
 
 export interface UserRole {
   userId?: string;
@@ -44,12 +45,14 @@ export class SqlRoleService {
   private map: StringMap;
   private roleModuleMap: StringMap;
   constructor(
+    protected find: (s: RoleSM, limit?: number, offset?: number|string, fields?: string[]) => Promise<SearchResult<Role>>,
     public param: (i: number) => string,
     public query: <T>(sql: string, args?: any[], m?: StringMap, bools?: Attribute[]) => Promise<T[]>,
     public exec: (sql: string, args?: any[]) => Promise<number>,
     public execBatch?: (statements: Statement[]) => Promise<number>
   ) {
     this.metadata = this.metadata.bind(this);
+    this.search = this.search.bind(this);
     this.all = this.all.bind(this);
     this.load = this.load.bind(this);
     this.insert = this.insert.bind(this);
@@ -62,6 +65,9 @@ export class SqlRoleService {
   }
   metadata(): Attributes {
     return roleModel.attributes;
+  }
+  search(s: RoleSM, limit?: number, offset?: number|string, fields?: string[]): Promise<SearchResult<Role>> {
+    return this.find(s, limit, offset, fields);
   }
   all(): Promise<Role[]> {
     return this.query<Role>('select * from roles order by roleId asc', undefined, this.map);

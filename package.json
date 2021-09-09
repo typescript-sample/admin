@@ -16,8 +16,8 @@
     "express": "^4.17.1",
     "express-ext": "^0.1.6",
     "mysql": "^2.18.1",
-    "mysql-core": "^0.1.4",
-    "query-core": "^0.1.5",
+    "mysql-core": "^0.1.7",
+    "query-core": "^0.1.7",
     "validator-x": "0.0.8"
   },
   "devDependencies": {
