@@ -1,6 +1,7 @@
 import { Storage } from '@google-cloud/storage';
 import { HealthController, resources, SearchConfig } from 'express-ext';
 import { GoogleStorageService, map, StorageConfig } from 'google-storage';
+import { RoleSM, UserSM } from 'onecore';
 import { mysql, SearchBuilder } from 'query-core';
 // import { Pool } from 'pg';
 // import { PoolManager, PostgreSQLChecker, param } from 'postgre';
@@ -8,10 +9,10 @@ import { Database } from 'sqlite3';
 import { PoolManager, SQLiteChecker } from 'sqlite3-core';
 import { createValidator } from 'validator-x';
 import { ApplicationContext } from './context';
-import { Role, RoleController, roleModel, RoleSM, SqlRoleService } from './role';
+import { Role, RoleController, roleModel, SqlRoleService } from './role';
 import { SqlUploadSerive } from './uploads/SqlUploadsService';
 import { UploadController } from './uploads/UploadController';
-import { SqlUserService, User, UserController, userModel, UserSM } from './user';
+import { SqlUserService, User, UserController, userModel } from './user';
 
 
 const credentials = {
@@ -39,14 +40,14 @@ export function createContext(pool: Database): ApplicationContext {
   const sqlChecker = new SQLiteChecker(pool);
   const health = new HealthController([sqlChecker]);
   const manager = new PoolManager(pool);
-  const config: SearchConfig = { list: 'results' };
+  const config: SearchConfig = { list: 'list' };
 
-  const roleService = new SqlRoleService(param, manager.query, manager.exec, manager.execBatch);
   const roleSearch = new SearchBuilder<Role, RoleSM>(manager.query, 'roles', roleModel.attributes, mysql);
+  const roleService = new SqlRoleService(roleSearch.search, param, manager.query, manager.exec, manager.execBatch);
   const role = new RoleController(log, roleSearch.search, roleService, config);
 
-  const userService = new SqlUserService(param, manager.query, manager.exec, manager.execBatch);
   const userSearch = new SearchBuilder<User, UserSM>(manager.query, 'users', userModel.attributes, mysql);
+  const userService = new SqlUserService(userSearch.search, param, manager.query, manager.exec, manager.execBatch);
   const user = new UserController(log, userSearch.search, userService, config);
 
 

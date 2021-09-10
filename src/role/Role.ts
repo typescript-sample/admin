@@ -5,3 +5,8 @@ export interface Role {
   remark?: string;
   privileges?: string[];
 }
+export interface Privilege {
+  id: string;
+  name: string;
+  children?: Privilege[];
+}

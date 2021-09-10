@@ -1,9 +1,6 @@
-import {User} from './User';
+import { ResultInfo, UserSM } from 'onecore';
+import { GenericSearchService } from 'onecore';
+import { User } from './User';
 
-export interface UserService {
-  all(): Promise<User[]>;
-  load(id: string): Promise<User>;
-  insert(user: User): Promise<number>;
-  update(user: User): Promise<number>;
-  delete(id: string): Promise<number>;
+export interface UserService extends GenericSearchService<User, number, number | ResultInfo<User>, UserSM> {
 }

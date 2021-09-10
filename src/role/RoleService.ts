@@ -1,9 +1,7 @@
-import {Role} from './Role';
+import { ResultInfo, RoleSM } from 'onecore';
+import { GenericSearchService } from 'onecore';
+import { Privilege, Role } from './Role'
 
-export interface RoleService {
-  all(): Promise<Role[]>;
-  load(id: string): Promise<Role>;
-  insert(user: Role): Promise<number>;
-  update(user: Role): Promise<number>;
-  delete(id: string): Promise<number>;
+export interface RoleService extends GenericSearchService<Role, any, number | ResultInfo<Role>, RoleSM> {
+  getPrivileges?(ctx?: any): Promise<Privilege[]>;
 }
