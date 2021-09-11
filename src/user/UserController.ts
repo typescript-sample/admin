@@ -1,5 +1,5 @@
 import {Request, Response} from 'express';
-import {GenericSearchHandler, handleError, param, SearchResult} from 'express-ext';
+import {GenericSearchHandler, handleError, queryParam, SearchResult} from 'express-ext';
 import {User} from './User';
 import {UserService} from './UserService';
 import {UserSM} from './UserSM';
@@ -12,12 +12,19 @@ export class UserController extends GenericSearchHandler<User, string, UserSM> {
   }
 
   all(req: Request, res: Response) {
-    this.userService.all()
+    const v = req.query['roleId'];
+    if (v && v.toString().length > 0) {
+      this.userService.getUsersOfRole(v.toString())
       .then(users => res.status(200).json(users))
       .catch(err => handleError(err, res, this.log));
+    } else {
+      this.userService.all()
+      .then(users => res.status(200).json(users))
+      .catch(err => handleError(err, res, this.log));
+    }
   }
   getUsersOfRole(req: Request, res: Response) {
-    const id = param(req, res, 'id');
+    const id = queryParam(req, res, 'roleId');
     if (id) {
       this.userService.getUsersOfRole(id)
       .then(users => res.status(200).json(users))

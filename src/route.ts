@@ -4,7 +4,6 @@ import {ApplicationContext} from './context';
 export function route(app: Application, ctx: ApplicationContext): void {
   app.get('/health', ctx.health.check);
 
-  app.get('/roles/:id/users', ctx.user.getUsersOfRole);
   app.put('/roles/:id/assign', ctx.role.assign);
 
   app.get('/roles', ctx.role.all);
@@ -16,6 +15,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
   app.patch('/roles/:id', ctx.role.patch);
   app.delete('/roles/:id', ctx.role.delete);
 
+  app.get('/users', ctx.user.all);
   app.post('/users/search', ctx.user.search);
   app.get('/users/search', ctx.user.search);
   app.get('/users/:id', ctx.user.load);
