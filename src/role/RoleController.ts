@@ -1,12 +1,12 @@
 import {Request, Response} from 'express';
-import {Controller, handleError, param, SearchResult} from 'express-ext';
+import {Controller, handleError, param} from 'express-ext';
 import {Role} from './Role';
 import {RoleFilter} from './RoleFilter';
 import {RoleService} from './RoleService';
 
 export class RoleController extends Controller<Role, string, RoleFilter> {
-  constructor(log: (msg: string, ctx?: any) => void, search: (s: RoleFilter, limit?: number, skip?: number|string, fields?: string[]) => Promise<SearchResult<Role>>, private roleService: RoleService) {
-    super(log, search, roleService);
+  constructor(log: (msg: any, ctx?: any) => void, private roleService: RoleService) {
+    super(log, roleService);
     this.all = this.all.bind(this);
     this.assign = this.assign.bind(this);
   }

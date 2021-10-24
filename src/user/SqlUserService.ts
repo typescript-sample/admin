@@ -1,5 +1,5 @@
 import {Attributes} from 'express-ext';
-import {Attribute, buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, keys, Model, SearchResult, select, Statement, StringMap} from 'query-core';
+import {Attribute, buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, keys, Model, SearchResult, select, SqlSearchWriter, Statement, StringMap} from 'query-core';
 import {User} from './User';
 import {UserFilter} from './UserFilter';
 import {userModel} from './UserModel';
@@ -20,17 +20,16 @@ export interface UserRole {
   userId?: string;
   roleId?: string;
 }
-export class SqlUserService {
+export class SqlUserService extends SqlSearchWriter<User, string, UserFilter> {
   private keys: Attribute[];
-  private map: StringMap;
   constructor(
     protected find: (s: UserFilter, limit?: number, offset?: number|string, fields?: string[]) => Promise<SearchResult<User>>,
     public param: (i: number) => string,
-    public query: <T>(sql: string, args?: any[], m?: StringMap, bools?: Attribute[]) => Promise<T[]>,
-    public exec: (sql: string, args?: any[]) => Promise<number>,
+    query: <T>(sql: string, args?: any[], m?: StringMap, bools?: Attribute[]) => Promise<T[]>,
+    exec: (sql: string, args?: any[]) => Promise<number>,
     public execBatch: (statements: Statement[]) => Promise<number>
   ) {
-    this.metadata = this.metadata.bind(this);
+    super(find, 'users', query, exec, userModel.attributes, param);
     this.search = this.search.bind(this);
     this.all = this.all.bind(this);
     this.load = this.load.bind(this);
@@ -40,9 +39,6 @@ export class SqlUserService {
     this.delete = this.delete.bind(this);
     this.keys = keys(userModel.attributes);
     this.map = buildMap(userModel.attributes);
-  }
-  metadata(): Attributes {
-    return userModel.attributes;
   }
   getUsersOfRole(roleId: string): Promise<User[]> {
     if (!roleId || roleId.length === 0) {
@@ -60,14 +56,14 @@ export class SqlUserService {
     return this.find(s, limit, offset, fields);
   }
   all(): Promise<User[]> {
-    return this.query<User>('select * from users order by userId asc', undefined, this.map);
+    return this.query('select * from users order by userId asc', undefined, this.map);
   }
   load(id: string): Promise<User|null> {
     const stmt = select(id, 'users', this.keys, this.param);
     if (!stmt) {
       return Promise.resolve(null);
     }
-    return this.query<User>(stmt.query, stmt.params, this.map)
+    return this.query(stmt.query, stmt.params, this.map)
       .then(users => {
         if (!users || users.length === 0) {
           return null;

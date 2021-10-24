@@ -18,11 +18,11 @@ export function createContext(pool: Pool): ApplicationContext {
 
   const roleSearch = new SearchBuilder<Role, RoleFilter>(manager.query, 'roles', roleModel.attributes, mysql);
   const roleService = new SqlRoleService(roleSearch.search, param, manager.query, manager.exec, manager.execBatch);
-  const role = new RoleController(log, roleSearch.search, roleService);
+  const role = new RoleController(log, roleService);
 
   const userSearch = new SearchBuilder<User, UserFilter>(manager.query, 'users', userModel.attributes, mysql);
   const userService = new SqlUserService(userSearch.search, param, manager.query, manager.exec, manager.execBatch);
-  const user = new UserController(log, userSearch.search, userService);
+  const user = new UserController(log, userService);
 
   const ctx: ApplicationContext = {health, role, user};
   return ctx;
