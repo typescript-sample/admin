@@ -1,11 +1,11 @@
 import {Request, Response} from 'express';
-import {GenericSearchHandler, handleError, queryParam, SearchResult} from 'express-ext';
+import {Controller, handleError, queryParam, SearchResult} from 'express-ext';
 import {User} from './User';
+import {UserFilter} from './UserFilter';
 import {UserService} from './UserService';
-import {UserSM} from './UserSM';
 
-export class UserController extends GenericSearchHandler<User, string, UserSM> {
-  constructor(log: (msg: string, ctx?: any) => void, search: (s: UserSM, limit?: number, skip?: number|string, fields?: string[]) => Promise<SearchResult<User>>, private userService: UserService) {
+export class UserController extends Controller<User, string, UserFilter> {
+  constructor(log: (msg: string, ctx?: any) => void, search: (s: UserFilter, limit?: number, skip?: number|string, fields?: string[]) => Promise<SearchResult<User>>, private userService: UserService) {
     super(log, search, userService);
     this.all = this.all.bind(this);
     this.getUsersOfRole = this.getUsersOfRole.bind(this);
