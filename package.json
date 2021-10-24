@@ -17,6 +17,7 @@
     "express-ext": "^0.1.8",
     "mysql": "^2.18.1",
     "mysql-core": "^0.1.9",
+    "onecore": "0.0.18",
     "query-core": "^0.1.7",
     "validator-x": "0.0.10"
   },

@@ -1,4 +1,4 @@
-import {Model} from 'query-core';
+import { Model } from 'onecore';
 
 export const roleModel: Model = {
   name: 'role',

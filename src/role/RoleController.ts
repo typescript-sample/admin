@@ -12,9 +12,13 @@ export class RoleController extends Controller<Role, string, RoleFilter> {
   }
 
   all(req: Request, res: Response) {
-    this.roleService.all()
+    if (this.roleService.all) {
+      this.roleService.all()
       .then(roles => res.status(200).json(roles))
       .catch(err => handleError(err, res, this.log));
+    } else {
+      res.status(405).end('Method Not Allowed');
+    }
   }
   assign(req: Request, res: Response) {
     const id = param(req, res, 'id');

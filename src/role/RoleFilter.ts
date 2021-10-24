@@ -1,4 +1,4 @@
-import {Filter} from 'express-ext';
+import { Filter } from 'onecore';
 
 export interface RoleFilter extends Filter {
   roleId?: string;

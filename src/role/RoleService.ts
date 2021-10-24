@@ -1,14 +1,7 @@
-import {Attributes, SearchResult} from 'query-core';
-import { RoleFilter } from 'role';
-import {Role} from './Role';
+import { ResultInfo, Service } from 'onecore';
+import { Role } from './Role';
+import { RoleFilter } from './RoleFilter';
 
-export interface RoleService {
-  all(): Promise<Role[]>;
-  metadata?(): Attributes;
-  search(s: RoleFilter, limit?: number, offset?: number|string, fields?: string[]): Promise<SearchResult<Role>>;
-  load(id: string): Promise<Role|null>;
-  insert(user: Role): Promise<number>;
-  update(user: Role): Promise<number>;
-  delete(id: string): Promise<number>;
+export interface RoleService extends Service<Role, string, number | ResultInfo<Role>, RoleFilter> {
   assign(id: string, users: string[]): Promise<number>;
 }

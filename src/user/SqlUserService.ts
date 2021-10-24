@@ -1,8 +1,8 @@
-import {Attributes} from 'express-ext';
-import {Attribute, buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, keys, Model, SearchResult, select, SqlSearchWriter, Statement, StringMap} from 'query-core';
-import {User} from './User';
-import {UserFilter} from './UserFilter';
-import {userModel} from './UserModel';
+import { Attribute, buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, Model, SearchResult, select, Service, Statement, StringMap } from 'query-core';
+import { User } from './User';
+import { UserFilter } from './UserFilter';
+import { userModel } from './UserModel';
+import { UserService } from './UserService';
 
 export const userRoleModel: Model = {
   name: 'userRole',
@@ -20,10 +20,9 @@ export interface UserRole {
   userId?: string;
   roleId?: string;
 }
-export class SqlUserService extends SqlSearchWriter<User, string, UserFilter> {
-  private keys: Attribute[];
+export class SqlUserService extends Service<User, string, UserFilter> implements UserService {
   constructor(
-    protected find: (s: UserFilter, limit?: number, offset?: number|string, fields?: string[]) => Promise<SearchResult<User>>,
+    protected find: (s: UserFilter, limit?: number, offset?: number | string, fields?: string[]) => Promise<SearchResult<User>>,
     public param: (i: number) => string,
     query: <T>(sql: string, args?: any[], m?: StringMap, bools?: Attribute[]) => Promise<T[]>,
     exec: (sql: string, args?: any[]) => Promise<number>,
@@ -32,12 +31,10 @@ export class SqlUserService extends SqlSearchWriter<User, string, UserFilter> {
     super(find, 'users', query, exec, userModel.attributes, param);
     this.search = this.search.bind(this);
     this.all = this.all.bind(this);
-    this.load = this.load.bind(this);
     this.insert = this.insert.bind(this);
     this.update = this.update.bind(this);
     this.patch = this.patch.bind(this);
     this.delete = this.delete.bind(this);
-    this.keys = keys(userModel.attributes);
     this.map = buildMap(userModel.attributes);
   }
   getUsersOfRole(roleId: string): Promise<User[]> {
@@ -52,14 +49,14 @@ export class SqlUserService extends SqlSearchWriter<User, string, UserFilter> {
       order by userId`;
     return this.query(q, [roleId], this.map);
   }
-  search(s: UserFilter, limit?: number, offset?: number|string, fields?: string[]): Promise<SearchResult<User>> {
+  search(s: UserFilter, limit?: number, offset?: number | string, fields?: string[]): Promise<SearchResult<User>> {
     return this.find(s, limit, offset, fields);
   }
   all(): Promise<User[]> {
     return this.query('select * from users order by userId asc', undefined, this.map);
   }
-  load(id: string): Promise<User|null> {
-    const stmt = select(id, 'users', this.keys, this.param);
+  load(id: string): Promise<User | null> {
+    const stmt = select(id, 'users', this.primaryKeys, this.param);
     if (!stmt) {
       return Promise.resolve(null);
     }
@@ -95,7 +92,7 @@ export class SqlUserService extends SqlSearchWriter<User, string, UserFilter> {
       return Promise.resolve(-1);
     }
     const query = `delete from userRoles where userId = ${this.param(1)}`;
-    stmts.push({query, params: [user.userId]});
+    stmts.push({ query, params: [user.userId] });
     insertUserRoles(stmts, user.userId, user.roles, this.param);
     return this.exec(stmt.query, stmt.params);
   }
@@ -105,8 +102,8 @@ export class SqlUserService extends SqlSearchWriter<User, string, UserFilter> {
   delete(id: string): Promise<number> {
     const stmts: Statement[] = [];
     const query = `delete from userRoles where userId = ${this.param(1)}`;
-    stmts.push({query, params: [id]});
-    const stmt = buildToDelete(id, 'users', this.keys, this.param);
+    stmts.push({ query, params: [id] });
+    const stmt = buildToDelete(id, 'users', this.primaryKeys, this.param);
     if (!stmt) {
       return Promise.resolve(-1);
     }
@@ -115,10 +112,10 @@ export class SqlUserService extends SqlSearchWriter<User, string, UserFilter> {
   }
 }
 
-function insertUserRoles(stmts: Statement[], userId: string, roles: string[]|undefined, param: (i: number) => string): Statement[] {
+function insertUserRoles(stmts: Statement[], userId: string, roles: string[] | undefined, param: (i: number) => string): Statement[] {
   if (roles && roles.length > 0) {
     const userRoles = roles.map<UserRole>(i => {
-      const userRole: UserRole = {userId, roleId: i};
+      const userRole: UserRole = { userId, roleId: i };
       return userRole;
     });
     const stmt = buildToInsertBatch(userRoles, 'userRoles', userRoleModel.attributes, param);

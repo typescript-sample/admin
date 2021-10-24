@@ -1,8 +1,8 @@
-import {Attributes} from 'express-ext';
-import {Attribute, buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, keys, Model, SearchResult, select, Statement, StringMap} from 'query-core';
-import {Role} from './Role';
-import {RoleFilter} from './RoleFilter';
-import {roleModel} from './RoleModel';
+import { Attribute, Attributes } from 'onecore';
+import { buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, keys, Model, SearchResult, select, Service, Statement, StringMap } from 'query-core';
+import { Role } from './Role';
+import { RoleFilter } from './RoleFilter';
+import { roleModel } from './RoleModel';
 
 export interface UserRole {
   userId?: string;
@@ -40,17 +40,16 @@ export interface Module {
   roleId?: string;
   permissions?: number;
 }
-export class SqlRoleService {
-  private keys: Attribute[];
-  private map: StringMap;
+export class SqlRoleService extends Service<Role, string, RoleFilter> {
   private roleModuleMap: StringMap;
   constructor(
-    protected find: (s: RoleFilter, limit?: number, offset?: number|string, fields?: string[]) => Promise<SearchResult<Role>>,
+    protected find: (s: RoleFilter, limit?: number, offset?: number | string, fields?: string[]) => Promise<SearchResult<Role>>,
     public param: (i: number) => string,
     public query: <T>(sql: string, args?: any[], m?: StringMap, bools?: Attribute[]) => Promise<T[]>,
     public exec: (sql: string, args?: any[]) => Promise<number>,
     public execBatch: (statements: Statement[]) => Promise<number>
   ) {
+    super(find, 'users', query, exec, roleModel.attributes, param);
     this.metadata = this.metadata.bind(this);
     this.search = this.search.bind(this);
     this.all = this.all.bind(this);
@@ -59,21 +58,20 @@ export class SqlRoleService {
     this.update = this.update.bind(this);
     this.patch = this.patch.bind(this);
     this.delete = this.delete.bind(this);
-    this.keys = keys(roleModel.attributes);
     this.map = buildMap(roleModel.attributes);
     this.roleModuleMap = buildMap(roleModuleModel.attributes);
   }
   metadata(): Attributes {
     return roleModel.attributes;
   }
-  search(s: RoleFilter, limit?: number, offset?: number|string, fields?: string[]): Promise<SearchResult<Role>> {
+  search(s: RoleFilter, limit?: number, offset?: number | string, fields?: string[]): Promise<SearchResult<Role>> {
     return this.find(s, limit, offset, fields);
   }
   all(): Promise<Role[]> {
     return this.query<Role>('select * from roles order by roleId asc', undefined, this.map);
   }
-  load(id: string): Promise<Role|null> {
-    const stmt = select(id, 'roles', this.keys, this.param);
+  load(id: string): Promise<Role | null> {
+    const stmt = select(id, 'roles', this.primaryKeys, this.param);
     if (!stmt) {
       return Promise.resolve(null);
     }
@@ -110,7 +108,7 @@ export class SqlRoleService {
     }
     stmts.push(stmt);
     const query = `delete from roleModules where roleId = ${this.param(1)}`;
-    stmts.push({query, params: [role.roleId]});
+    stmts.push({ query, params: [role.roleId] });
     insertRoleModules(stmts, role.roleId, role.privileges, this.param);
     return this.execBatch(stmts);
   }
@@ -119,22 +117,22 @@ export class SqlRoleService {
   }
   delete(id: string): Promise<number> {
     const stmts: Statement[] = [];
-    const stmt = buildToDelete(id, 'roles', this.keys, this.param);
+    const stmt = buildToDelete(id, 'roles', this.primaryKeys, this.param);
     if (!stmt) {
       return Promise.resolve(-1);
     }
     stmts.push(stmt);
     const query = `delete from roleModules where userId = ${this.param(1)}`;
-    stmts.push({query, params: [id]});
+    stmts.push({ query, params: [id] });
     return this.execBatch(stmts);
   }
   assign(roleId: string, users: string[]): Promise<number> {
     const userRoles: UserRole[] = users.map<UserRole>(u => {
-      return {roleId, userId: u};
+      return { roleId, userId: u };
     });
     const stmts: Statement[] = [];
     const q1 = `delete from userRoles where roleId = ${this.param(1)}`;
-    stmts.push({query: q1, params: [roleId]});
+    stmts.push({ query: q1, params: [roleId] });
     const s = buildToInsertBatch<UserRole>(userRoles, 'userRoles', userRoleModel.attributes, this.param);
     if (s) {
       stmts.push(s);
@@ -142,7 +140,7 @@ export class SqlRoleService {
     return this.execBatch(stmts);
   }
 }
-function insertRoleModules(stmts: Statement[], roleId: string, privileges: string[]|undefined, param: (i: number) => string): Statement[] {
+function insertRoleModules(stmts: Statement[], roleId: string, privileges: string[] | undefined, param: (i: number) => string): Statement[] {
   if (privileges && privileges.length > 0) {
     let permissions = 0;
     const modules = privileges.map<Module>(i => {
@@ -153,7 +151,7 @@ function insertRoleModules(stmts: Statement[], roleId: string, privileges: strin
           permissions = 0;
         }
       }
-      const ms: Module = {roleId, moduleId: i, permissions};
+      const ms: Module = { roleId, moduleId: i, permissions };
       return ms;
     });
     const stmt = buildToInsertBatch(modules, 'roleModules', roleModuleModel.attributes, param);

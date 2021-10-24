@@ -1,4 +1,4 @@
-import {Filter} from 'express-ext';
+import { Filter } from 'onecore';
 
 export interface UserFilter extends Filter {
   id?: string;
