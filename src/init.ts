@@ -51,8 +51,8 @@ export function createContext(pool: Pool): ApplicationContext {
 
   // listBuckets(storage);
 
-  const uploadService = new SqlUploadSerive(pool, param, manager.query, manager.exec, manager.execBatch);
-  const uploads = new UploadController(log, storageService, 'media', uploadService);
+  const uploadService = new SqlUploadSerive(pool, 'media' ,storageService.upload ,storageService.delete ,param, manager.query, manager.exec, manager.execBatch);
+  const uploads = new UploadController(log, uploadService);
   const ctx: ApplicationContext = { health, role, user, uploads };
 
   return ctx;

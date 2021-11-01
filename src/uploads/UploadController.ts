@@ -1,12 +1,11 @@
 import { Request, Response } from 'express';
 import { handleError } from 'express-ext';
-import { StorageService } from 'google-storage';
 import { FileUploads, Uploads } from 'uploads';
 import { UploadSerive } from './UploadSerivce';
 import { getFileName } from './utils';
 
 export class UploadController {
-  constructor(private log: (msg: string, ctx?: any) => void, private storageService: StorageService, private directory: string, private uploadService: UploadSerive) {
+  constructor(private log: (msg: string, ctx?: any) => void, private uploadService: UploadSerive) {
     this.all = this.all.bind(this);
     this.load = this.load.bind(this);
     this.upload = this.upload.bind(this);
@@ -41,82 +40,33 @@ export class UploadController {
     const type = fileType.split('/')[0];
     const { id, source } = req.body;
     const name = `${id.toString()}_` + fileName;
-    this.storageService
-      .upload(this.directory, name, fileBuffer)
-      .then((result) => {
-        this.uploadService.load(id.toString()).then((upload) => {
-          if (upload) {
-            upload.data.push({ source, type, url: result });
-            this.uploadService.insert({ userId: id, data: upload.data }).then(() => res.status(200).json(result));
-          } else {
-            this.uploadService.insert({ userId: id, data: [{ source, type, url: result }] }).then(() => res.status(200).json(result));
-          }
-        })
-      })
-      .catch((err) => {
-        return handleError(err, res, this.log);
-      });
+    this.uploadService.uploadFile(id, source, type, name, fileBuffer).then(result => 
+       res.status(200).json(result)
+    ).catch(e =>  handleError(e, res, this.log));
   }
   remove(req: Request, res: Response) {
     const { url, userId } = req.query;
     const fileName = getFileName(url.toString());
-    this.storageService
-      .delete(this.directory, fileName)
-      .then((result) => {
-        if (result) {
-          return this.uploadService.load(userId.toString()).then(upload => {
-            const deleteFile = upload.data.findIndex(item => item.url === url);
-            const userImageUrl = upload.data.filter(d => d.type === 'image')[0].url;
-            if (deleteFile > -1 && url !== userImageUrl) {
-              upload.data.splice(deleteFile, 1);
-              return this.uploadService.insert({ userId: userId.toString(), data: upload.data }).then(() => {
-                return res.status(200).send('Delete Successful!');
-              });
-            } else if (deleteFile > -1 && url === userImageUrl) {
-              upload.data.splice(deleteFile, 1);
-              return this.uploadService.updateData(upload.data, userId.toString()).then(() => {
-                return res.status(200).send('Delete Successful!');
-              });
-            } else {
-              return res.status(400).send('File not found!');
-            }
-          });
-        }
-      })
-      .catch((err) => {
-        return handleError(err, res, this.log);
-      });
+    this.uploadService.deleteFile(userId.toString(), fileName, url.toString()).then(result =>  
+      res.status(200).json(result)
+    ).catch(e =>  handleError(e, res, this.log));
   }
   insertData(req: Request, res: Response) {
     const uploadReq = req.body as Uploads;
     if (!uploadReq) {
       return res.status(400).send('require');
     } else {
-      return this.uploadService.load(uploadReq.userId).then((upload) => {
-        if (upload) {
-          upload.data.push(uploadReq.data[0]);
-          return this.uploadService.insert({ userId: uploadReq.userId, data: upload.data }).then(() => res.status(200).send('1'));
-        } else {
-          return this.uploadService.insert({ userId: uploadReq.userId, data: [uploadReq.data[0]] }).then(() => res.status(200).send('1'));
-        }
-      })
-        .catch((err) => {
-          return handleError(err, res, this.log);
-        });
+      this.uploadService.insertData(uploadReq).then(result => 
+        res.status(200).json(result)).
+        catch(e =>  handleError(e, res, this.log));
     }
   }
   deleteData(req: Request, res: Response) {
     const { url, userId } = req.query;
     if (url && userId) {
-      return this.uploadService.load(userId.toString()).then(upload => {
-        const deleteFile = upload.data.findIndex(item => item.url === url);
-        if (deleteFile > -1) {
-          upload.data.splice(deleteFile, 1);
-          return this.uploadService.insert({ userId: userId.toString(), data: upload.data }).then(() => res.status(200).send('Delete Successful!'));
-        } else {
-          return res.status(400).send('File not found!');
-        }
-      });
+      this.uploadService.deleteData(userId.toString(), url.toString())
+        .then(result => res.status(200).json(result))
+        .catch(e => handleError(e, res, this.log));
     } else {
       return res.status(400).send('require');
     }
@@ -135,7 +85,7 @@ export class UploadController {
     const { data, userId } = req.body;
     const dataUpdate = data as FileUploads[];
     if (dataUpdate && userId) {
-      return this.uploadService.updateData(dataUpdate, userId).then(r => {
+      return this.uploadService.updateData(userId, dataUpdate).then(r => {
         return res.status(200).json(r);
       }).catch(e => handleError(e, res, this.log));
     } else {
