@@ -1,4 +1,6 @@
 import { Storage } from '@google-cloud/storage';
+import { AuthController } from './auth/authController';
+import { Auth } from './auth/sqlAuthService';
 import { HealthController, resources, SearchConfig } from 'express-ext';
 import { GoogleStorageService, map, StorageConfig } from 'google-storage';
 import { Pool } from 'pg';
@@ -35,6 +37,9 @@ export function createContext(pool: Pool): ApplicationContext {
   const manager = new PoolManager(pool);
   const config: SearchConfig = { list: 'results' };
 
+  const authService = new Auth('auth', param, manager.query);
+  const auth = new AuthController(authService.authenticate, log);
+
   const roleService = new SqlRoleService(param, manager.query, manager.exec, manager.execBatch);
   const roleSearch = new SearchBuilder<Role, RoleSM>(manager.query, 'roles', roleModel.attributes, mysql);
   const role = new RoleController(log, roleSearch.search, roleService, config);
@@ -53,7 +58,7 @@ export function createContext(pool: Pool): ApplicationContext {
 
   const uploadService = new SqlUploadSerive(pool, 'media' ,storageService.upload ,storageService.delete ,param, manager.query, manager.exec, manager.execBatch);
   const uploads = new UploadController(log, uploadService);
-  const ctx: ApplicationContext = { health, role, user, uploads };
+  const ctx: ApplicationContext = { health, role, user, uploads, auth };
 
   return ctx;
 }

@@ -1,3 +1,4 @@
+import { AuthController } from './auth/authController';
 import { HealthController } from 'express-ext';
 import { UploadController } from 'uploads/UploadController';
 import { RoleController } from './role';
@@ -8,4 +9,5 @@ export interface ApplicationContext {
   role: RoleController;
   user: UserController;
   uploads: UploadController;
+  auth: AuthController;
 }
