@@ -1,4 +1,4 @@
-export interface Uploads {
+export interface Upload {
   userId: string;
   data: FileUploads[];
 }

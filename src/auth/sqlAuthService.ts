@@ -1,11 +1,11 @@
-import { sign } from "jsonwebtoken";
-import { Attribute, buildMap, keys, Model, select, StringMap } from "query-core";
-import { userModel } from "./authModel";
-import { AuthModal, Privileges, User } from "./auth";
+import { sign } from 'jsonwebtoken';
+import { Attribute, buildMap, keys, Model, StringMap } from 'query-core';
+import { AuthModal, Privileges, User } from './auth';
+import { userModel } from './authModel';
 
 export interface RoleId {
-  roleId: string,
-};
+  roleId: string;
+}
 
 export const role: Model = {
   name: 'role',
@@ -15,181 +15,181 @@ export const role: Model = {
       key: true
     },
   }
-}
+};
 
 const privileges: Privileges[] = [
   {
     children: null,
-    icon: "assignments",
-    id: "dashboard",
-    name: "Dashboard",
-    path: "/dashboard",
+    icon: 'assignments',
+    id: 'dashboard',
+    name: 'Dashboard',
+    path: '/dashboard',
     permissions: 3,
-    resource: "dashboard",
+    resource: 'dashboard',
     sequence: 999,
   },
   {
     children: [
       {
-        icon: "person",
-        id: "user",
-        name: "User Management",
-        path: "/users",
+        icon: 'person',
+        id: 'user',
+        name: 'User Management',
+        path: '/users',
         permissions: 3,
-        resource: "user",
+        resource: 'user',
         sequence: 999,
       },
       {
-        icon: "credit_card",
-        id: "role",
-        name: "Role Management",
-        path: "/roles",
+        icon: 'credit_card',
+        id: 'role',
+        name: 'Role Management',
+        path: '/roles',
         permissions: 3,
-        resource: "role",
+        resource: 'role',
         sequence: 999,
       },
       {
-        icon: "credit_card",
-        id: "role_assignment",
-        name: "Role Management",
-        path: "/role-assignment",
+        icon: 'credit_card',
+        id: 'role_assignment',
+        name: 'Role Management',
+        path: '/role-assignment',
         permissions: 3,
-        resource: "role_assignment",
+        resource: 'role_assignment',
         sequence: 999,
       },
       {
-        icon: "zoom_in",
-        id: "audit_log",
-        name: "Audit Log",
-        path: "/audit-logs",
+        icon: 'zoom_in',
+        id: 'audit_log',
+        name: 'Audit Log',
+        path: '/audit-logs',
         permissions: 3,
-        resource: "audit_log",
+        resource: 'audit_log',
         sequence: 999,
       }
     ],
-    icon: "contacts",
-    id: "admin",
-    name: "Admin",
-    path: "/admin",
+    icon: 'contacts',
+    id: 'admin',
+    name: 'Admin',
+    path: '/admin',
     permissions: 3,
-    resource: "admin",
+    resource: 'admin',
     sequence: 999,
   },
   {
     children: [
       {
-        icon: "group",
-        id: "group",
-        name: "Group",
-        path: "/group",
+        icon: 'group',
+        id: 'group',
+        name: 'Group',
+        path: '/group',
         permissions: 3,
-        resource: "group",
+        resource: 'group',
         sequence: 999,
       },
       {
-        id: "company",
-        name: "Company Profile",
-        path: "/companies",
+        id: 'company',
+        name: 'Company Profile',
+        path: '/companies',
         permissions: 3,
-        resource: "company",
+        resource: 'company',
         sequence: 999,
       },
       {
-        id: "product",
-        name: "Product Profile",
-        path: "/products",
+        id: 'product',
+        name: 'Product Profile',
+        path: '/products',
         permissions: 3,
-        resource: "product",
+        resource: 'product',
         sequence: 999,
       },
       {
-        id: "fee",
-        name: "Fee Profile",
-        path: "/fees",
+        id: 'fee',
+        name: 'Fee Profile',
+        path: '/fees',
         permissions: 3,
-        resource: "fee",
+        resource: 'fee',
         sequence: 999,
       },
       {
-        id: "merchant",
-        name: "Merchant Profile",
-        path: "/merchants",
+        id: 'merchant',
+        name: 'Merchant Profile',
+        path: '/merchants',
         permissions: 3,
-        resource: "merchant",
+        resource: 'merchant',
         sequence: 999,
       }
     ],
-    icon: "settings",
-    id: "setup",
-    name: "Setup",
-    path: "/setup",
+    icon: 'settings',
+    id: 'setup',
+    name: 'Setup',
+    path: '/setup',
     permissions: 3,
-    resource: "setup",
+    resource: 'setup',
     sequence: 999,
   },
   {
     children: [
       {
-        icon: "zoom_in",
-        id: "activity_log",
-        name: "Activity Log",
-        path: "/activity-logs",
+        icon: 'zoom_in',
+        id: 'activity_log',
+        name: 'Activity Log',
+        path: '/activity-logs',
         permissions: 3,
-        resource: "activity_log",
+        resource: 'activity_log',
         sequence: 999,
       },
       {
-        icon: "chrome_reader_mode",
-        id: "operation_report",
-        name: "Operation Report",
-        path: "/operation-report",
+        icon: 'chrome_reader_mode',
+        id: 'operation_report',
+        name: 'Operation Report',
+        path: '/operation-report',
         permissions: 3,
-        resource: "operation_report",
+        resource: 'operation_report',
         sequence: 999,
       },
       {
-        id: "merchant_report",
-        name: "Merchant Report",
-        path: "/merchant-report",
+        id: 'merchant_report',
+        name: 'Merchant Report',
+        path: '/merchant-report',
         permissions: 3,
-        resource: "merchant_report",
+        resource: 'merchant_report',
         sequence: 999,
       },
       {
-        icon: "attach_money",
-        id: "merchant_fee_report",
-        name: "Merchant Fee Report",
-        path: "/merchant-fee-report",
+        icon: 'attach_money',
+        id: 'merchant_fee_report',
+        name: 'Merchant Fee Report',
+        path: '/merchant-fee-report',
         permissions: 3,
-        resource: "merchant_fee_report",
+        resource: 'merchant_fee_report',
         sequence: 999
       },
       {
-        id: "summary_report",
-        name: "Summary Report",
-        path: "/summary-report",
+        id: 'summary_report',
+        name: 'Summary Report',
+        path: '/summary-report',
         permissions: 3,
-        resource: "summary_report",
+        resource: 'summary_report',
         sequence: 999,
       },
       {
-        id: "transaction_report",
-        name: "Transaction Report",
-        path: "/transaction-report",
+        id: 'transaction_report',
+        name: 'Transaction Report',
+        path: '/transaction-report',
         permissions: 3,
-        resource: "transaction_report",
+        resource: 'transaction_report',
         sequence: 999,
       }
     ],
-    icon: "pie_chart",
-    id: "report",
-    name: "Report",
-    path: "/report",
+    icon: 'pie_chart',
+    id: 'report',
+    name: 'Report',
+    path: '/report',
     permissions: 3,
-    resource: "report",
+    resource: 'report',
     sequence: 999
   }
-]
+];
 
 export class Auth {
   private keys: Attribute[];
@@ -207,8 +207,8 @@ export class Auth {
   authenticate(username: string, password: string): Promise<AuthModal> {
     const q = `select * from users where username = ${this.param(1)}`;
     return this.query<User>(q, [username], this.map).then(users => {
-      const user = users[0]
-      if (user.status != 'A') {
+      const user = users[0];
+      if (user.status !== 'A') {
         throw new Error(`accout isn't active`);
       }
       const result: AuthModal = {
@@ -216,14 +216,14 @@ export class Auth {
         user: {
           id: user.userId,
           displayName: user.displayName,
-          token: sign({id: user.userId}, this.secretKey, { expiresIn: "15m" }),
+          token: sign({id: user.userId}, this.secretKey, { expiresIn: '15m' }),
           tokenExpiredTime: new Date((new Date()).getTime() + (15 * 60 * 1000)),
-          privileges: privileges,
+          privileges,
         }
       };
-      return result
+      return result;
     }).catch(err => {
-      throw err
-    })
+      throw err;
+    });
   }
 }

@@ -1,8 +1,8 @@
 import { Pool, PoolClient } from 'pg';
 import { save } from 'postgre';
 import { Attribute, Statement, StringMap } from 'query-core';
-import { FileUploads, Uploads } from 'uploads';
 import { User } from 'user';
+import { FileUploads, Upload } from './Upload';
 import { uploadModel } from './UploadModel';
 
 export class SqlUploadSerive {
@@ -29,13 +29,13 @@ export class SqlUploadSerive {
     this.insertData = this.insertData.bind(this);
     this.deleteData = this.deleteData.bind(this);
   }
-  all(): Promise<Uploads[]> {
-    return this.query<Uploads>('select * from uploads order by userid asc', undefined, this.map);
+  all(): Promise<Upload[]> {
+    return this.query<Upload>('select * from uploads order by userid asc', undefined, this.map);
   }
-  insert(upload: Uploads): Promise<number> {
+  insert(upload: Upload): Promise<number> {
     return save(this.client, upload, 'uploads', uploadModel.attributes);
   }
-  insertData(uploadReq: Uploads): Promise<number> {
+  insertData(uploadReq: Upload): Promise<number> {
     return this.load(uploadReq.userId).then((upload) => {
       if (upload) {
         upload.data.push(uploadReq.data[0]);
@@ -48,8 +48,8 @@ export class SqlUploadSerive {
       throw err;
     });
   }
-  load(id: string): Promise<Uploads> {
-    return this.query<Uploads>('select * from uploads where userid = $1', [id]).then((uploads) => {
+  load(id: string): Promise<Upload> {
+    return this.query<Upload>('select * from uploads where userid = $1', [id]).then((uploads) => {
       if (!uploads || uploads.length === 0) {
         return null;
       } else {
@@ -70,13 +70,13 @@ export class SqlUploadSerive {
         } else {
           return this.insert({ userId: id, data: [{ source, type, url: result }] }).then(() => result);
         }
-      })
+      });
     })
     .catch((err) => {
       throw err;
     });
   }
-  deleteFile(userId:string, fileName:string, url: string): Promise<number> {
+  deleteFile(userId: string, fileName: string, url: string): Promise<number> {
     return this.storageDelete(this.directory, fileName).then((result) => {
       if (result) {
         return this.load(userId).then(upload => {
@@ -125,7 +125,7 @@ export class SqlUploadSerive {
         return 0;
       }
     }).catch(e => {
-      throw e
+      throw e;
     });
   }
 }

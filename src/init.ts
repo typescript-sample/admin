@@ -1,12 +1,12 @@
 import { Storage } from '@google-cloud/storage';
-import { AuthController } from './auth/authController';
-import { Auth } from './auth/sqlAuthService';
 import { HealthController, resources, SearchConfig } from 'express-ext';
 import { GoogleStorageService, map, StorageConfig } from 'google-storage';
 import { Pool } from 'pg';
 import { param, PoolManager, PostgreSQLChecker } from 'postgre';
 import { mysql, SearchBuilder } from 'query-core';
 import { createValidator } from 'validator-x';
+import { AuthController } from './auth/authController';
+import { Auth } from './auth/sqlAuthService';
 import { ApplicationContext } from './context';
 import { Role, RoleController, roleModel, RoleSM, SqlRoleService } from './role';
 import { SqlUploadSerive } from './uploads/SqlUploadsService';
@@ -56,7 +56,7 @@ export function createContext(pool: Pool): ApplicationContext {
 
   // listBuckets(storage);
 
-  const uploadService = new SqlUploadSerive(pool, 'media' ,storageService.upload ,storageService.delete ,param, manager.query, manager.exec, manager.execBatch);
+  const uploadService = new SqlUploadSerive(pool, 'media', storageService.upload, storageService.delete, param, manager.query, manager.exec, manager.execBatch);
   const uploads = new UploadController(log, uploadService);
   const ctx: ApplicationContext = { health, role, user, uploads, auth };
 

@@ -7,7 +7,7 @@ export function route(app: Application, ctx: ApplicationContext): void {
 
   app.get('/health', ctx.health.check);
 
-  app.post("/authenticate", ctx.auth.authenticate);
+  app.post('/authenticate', ctx.auth.authenticate);
 
   app.get('/roles', ctx.role.all);
   app.post('/roles/search', ctx.role.search);

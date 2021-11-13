@@ -1,4 +1,4 @@
-import { Model } from "query-core";
+import { Model } from 'query-core';
 
 export const userModel: Model = {
   name: 'user',

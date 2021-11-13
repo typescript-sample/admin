@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { handleError } from 'express-ext';
-import { FileUploads, Uploads } from 'uploads';
+import { FileUploads, Upload } from './Upload';
 import { UploadSerive } from './UploadSerivce';
 import { getFileName } from './utils';
 
@@ -31,7 +31,7 @@ export class UploadController {
       }
     }).catch(e => {
       return handleError(e, res, this.log);
-    })
+    });
   }
   upload(req: Request, res: Response) {
     const fileName = req.file.originalname;
@@ -40,23 +40,23 @@ export class UploadController {
     const type = fileType.split('/')[0];
     const { id, source } = req.body;
     const name = `${id.toString()}_` + fileName;
-    this.uploadService.uploadFile(id, source, type, name, fileBuffer).then(result => 
+    this.uploadService.uploadFile(id, source, type, name, fileBuffer).then(result =>
        res.status(200).json(result)
     ).catch(e =>  handleError(e, res, this.log));
   }
   remove(req: Request, res: Response) {
     const { url, userId } = req.query;
     const fileName = getFileName(url.toString());
-    this.uploadService.deleteFile(userId.toString(), fileName, url.toString()).then(result =>  
+    this.uploadService.deleteFile(userId.toString(), fileName, url.toString()).then(result =>
       res.status(200).json(result)
     ).catch(e =>  handleError(e, res, this.log));
   }
   insertData(req: Request, res: Response) {
-    const uploadReq = req.body as Uploads;
+    const uploadReq = req.body as Upload;
     if (!uploadReq) {
       return res.status(400).send('require');
     } else {
-      this.uploadService.insertData(uploadReq).then(result => 
+      this.uploadService.insertData(uploadReq).then(result =>
         res.status(200).json(result)).
         catch(e =>  handleError(e, res, this.log));
     }

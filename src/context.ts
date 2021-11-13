@@ -1,6 +1,6 @@
-import { AuthController } from './auth/authController';
 import { HealthController } from 'express-ext';
 import { UploadController } from 'uploads/UploadController';
+import { AuthController } from './auth/authController';
 import { RoleController } from './role';
 import { UserController } from './user';
 
