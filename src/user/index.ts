@@ -1,9 +1,18 @@
 import { Request, Response } from 'express';
 import { Controller, handleError, queryParam } from 'express-ext';
-import { Attribute, buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, Model, SearchResult, select, Service, Statement, StringMap } from 'query-core';
+import { Attributes, Log, Search } from 'onecore';
+import { buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, DB, Model, SearchBuilder, SearchResult, select, Service, Statement } from 'query-core';
 import { User, UserFilter, userModel, UserService } from './user';
 
 export * from './user';
+
+export function useUserService(db: DB): UserService {
+  const builder = new SearchBuilder<User, UserFilter>(db.query, 'users', userModel, db.driver);
+  return new SqlUserService(builder.search, db);
+}
+export function useUserController(log: Log, db: DB): UserController {
+  return new UserController(log, useUserService(db));
+}
 
 export class UserController extends Controller<User, string, UserFilter> {
   constructor(log: (msg: any, ctx?: any) => void, private userService: UserService) {
@@ -37,38 +46,31 @@ export class UserController extends Controller<User, string, UserFilter> {
   }
 }
 
-const userRoleModel: Model = {
-  name: 'userRole',
-  source: 'userRoles',
-  attributes: {
-    userId: {
-      key: true
-    },
-    roleId: {
-      key: true
-    },
-  }
+const userRoleModel: Attributes = {
+  userId: {
+    key: true
+  },
+  roleId: {
+    key: true
+  },
 };
 interface UserRole {
   userId?: string;
-  roleId?: string;
+  roleId: string;
 }
 export class SqlUserService extends Service<User, string, UserFilter> implements UserService {
   constructor(
-    protected find: (s: UserFilter, limit?: number, offset?: number | string, fields?: string[]) => Promise<SearchResult<User>>,
-    public param: (i: number) => string,
-    query: <T>(sql: string, args?: any[], m?: StringMap, bools?: Attribute[]) => Promise<T[]>,
-    exec: (sql: string, args?: any[]) => Promise<number>,
-    public execBatch: (statements: Statement[]) => Promise<number>
+    protected find: Search<User, UserFilter>,
+    db: DB
   ) {
-    super(find, 'users', query, exec, userModel.attributes, param);
+    super(find, db, 'users', userModel);
     this.search = this.search.bind(this);
     this.all = this.all.bind(this);
     this.insert = this.insert.bind(this);
     this.update = this.update.bind(this);
     this.patch = this.patch.bind(this);
     this.delete = this.delete.bind(this);
-    this.map = buildMap(userModel.attributes);
+    this.map = buildMap(userModel);
   }
   getUsersOfRole(roleId: string): Promise<User[]> {
     if (!roleId || roleId.length === 0) {
@@ -93,16 +95,16 @@ export class SqlUserService extends Service<User, string, UserFilter> implements
     if (!stmt) {
       return Promise.resolve(null);
     }
-    return this.query(stmt.query, stmt.params, this.map)
+    return this.query<User>(stmt.query, stmt.params, this.map)
       .then(users => {
         if (!users || users.length === 0) {
           return null;
         }
         const user = users[0];
-        const q = `select roleId as id from userRoles where userId = ${this.param(1)}`;
-        return this.query(q, [user.userId]).then(roles => {
+        const q = `select roleId from userRoles where userId = ${this.param(1)}`;
+        return this.query<UserRole>(q, [user.userId]).then(roles => {
           if (roles && roles.length > 0) {
-            user.roles = roles.map(i => (i as any)['id']);
+            user.roles = roles.map(i => i.roleId);
           }
           return user;
         });
@@ -110,7 +112,7 @@ export class SqlUserService extends Service<User, string, UserFilter> implements
   }
   insert(user: User): Promise<number> {
     const stmts: Statement[] = [];
-    const stmt = buildToInsert(user, 'users', userModel.attributes, this.param);
+    const stmt = buildToInsert(user, 'users', userModel, this.param);
     if (!stmt) {
       return Promise.resolve(-1);
     }
@@ -120,7 +122,7 @@ export class SqlUserService extends Service<User, string, UserFilter> implements
   }
   update(user: User): Promise<number> {
     const stmts: Statement[] = [];
-    const stmt = buildToUpdate(user, 'users', userModel.attributes, this.param);
+    const stmt = buildToUpdate(user, 'users', userModel, this.param);
     if (!stmt) {
       return Promise.resolve(-1);
     }
@@ -151,7 +153,7 @@ function insertUserRoles(stmts: Statement[], userId: string, roles: string[] | u
       const userRole: UserRole = { userId, roleId: i };
       return userRole;
     });
-    const stmt = buildToInsertBatch(userRoles, 'userRoles', userRoleModel.attributes, param);
+    const stmt = buildToInsertBatch(userRoles, 'userRoles', userRoleModel, param);
     if (stmt) {
       stmts.push(stmt);
     }

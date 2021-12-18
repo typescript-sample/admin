@@ -1,39 +1,36 @@
-import {json} from 'body-parser';
+import { json } from 'body-parser';
+import { merge } from 'config-plus';
 import dotenv from 'dotenv';
 import express from 'express';
+import { MiddlewareLogger } from 'express-ext';
 import http from 'http';
+import { createLogger } from 'logger-core';
 import mysql from 'mysql';
-import {createContext} from './init';
-import {route} from './route';
+import { PoolManager } from 'mysql-core';
+import { config, env } from './config';
+import { useContext } from './context';
+import { route } from './route';
 
 dotenv.config();
+const conf = merge(config, process.env, env, process.env.ENV);
 
 const app = express();
+const logger = createLogger(conf.log);
+const middleware = new MiddlewareLogger(logger.info, conf.middleware);
+app.use(json(), middleware.log);
 
-const port = process.env.PORT;
-const password = process.env.PASSWORD;
-
-app.use(json());
-
-const pool = mysql.createPool({
-  host: '127.0.0.1',
-  port: 3306,
-  user: 'root',
-  password,
-  database: 'backoffice',
-  multipleStatements: true,
-});
+const pool = mysql.createPool(conf.db);
 
 pool.getConnection((err, conn) => {
   if (err) {
     console.error('Failed to connect to MySQL.', err.message, err.stack);
-  }
-  if (conn) {
-    const ctx = createContext(pool);
-    route(app, ctx);
-    http.createServer(app).listen(port, () => {
-      console.log('Start server at port ' + port);
-    });
+  } else if (conn) {
     console.log('Connected successfully to MySQL.');
+    const db = new PoolManager(pool);
+    const ctx = useContext(db, logger, middleware);
+    route(app, ctx);
+    http.createServer(app).listen(conf.port, () => {
+      console.log('Start server at port ' + conf.port);
+    });
   }
 });

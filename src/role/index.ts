@@ -1,10 +1,18 @@
 import { Request, Response } from 'express';
 import { Controller, handleError, param as getParam } from 'express-ext';
-import { Attribute, Attributes } from 'onecore';
-import { buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, keys, Model, SearchResult, select, Service, Statement, StringMap } from 'query-core';
+import { Attributes, Log, Search } from 'onecore';
+import { buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, DB, keys, Model, SearchBuilder, SearchResult, select, Service, Statement, StringMap } from 'query-core';
 import { Role, RoleFilter, roleModel, RoleService } from './role';
 
 export * from './role';
+
+export function useRoleService(db: DB): RoleService {
+  const builder = new SearchBuilder<Role, RoleFilter>(db.query, 'roles', roleModel, db.driver);
+  return new SqlRoleService(builder.search, db);
+}
+export function useRoleController(log: Log, db: DB): RoleController {
+  return new RoleController(log, useRoleService(db));
+}
 
 export class RoleController extends Controller<Role, string, RoleFilter> {
   constructor(log: (msg: any, ctx?: any) => void, private roleService: RoleService) {
@@ -12,7 +20,6 @@ export class RoleController extends Controller<Role, string, RoleFilter> {
     this.all = this.all.bind(this);
     this.assign = this.assign.bind(this);
   }
-
   all(req: Request, res: Response) {
     if (this.roleService.all) {
       this.roleService.all()
@@ -37,37 +44,29 @@ export class RoleController extends Controller<Role, string, RoleFilter> {
   }
 }
 
+const userRoleModel: Attributes = {
+  userId: {
+    key: true
+  },
+  roleId: {
+    key: true
+  }
+};
+const roleModuleModel: Attributes = {
+  roleId: {
+    key: true
+  },
+  moduleId: {
+    key: true
+  },
+  permissions: {
+    type: 'number'
+  }
+};
 interface UserRole {
   userId?: string;
   roleId?: string;
 }
-const userRoleModel: Model = {
-  name: 'userRole',
-  source: 'userRoles',
-  attributes: {
-    userId: {
-      key: true
-    },
-    roleId: {
-      key: true
-    },
-  }
-};
-const roleModuleModel: Model = {
-  name: 'userRole',
-  source: 'userRoles',
-  attributes: {
-    roleId: {
-      key: true
-    },
-    moduleId: {
-      key: true
-    },
-    permissions: {
-      type: 'number'
-    }
-  }
-};
 interface Module {
   moduleId?: string;
   roleId?: string;
@@ -76,13 +75,10 @@ interface Module {
 export class SqlRoleService extends Service<Role, string, RoleFilter> {
   private roleModuleMap: StringMap;
   constructor(
-    protected find: (s: RoleFilter, limit?: number, offset?: number | string, fields?: string[]) => Promise<SearchResult<Role>>,
-    public param: (i: number) => string,
-    public query: <T>(sql: string, args?: any[], m?: StringMap, bools?: Attribute[]) => Promise<T[]>,
-    public exec: (sql: string, args?: any[]) => Promise<number>,
-    public execBatch: (statements: Statement[]) => Promise<number>
+    protected find: Search<Role, RoleFilter>,
+    db: DB
   ) {
-    super(find, 'users', query, exec, roleModel.attributes, param);
+    super(find, db, 'users', roleModel);
     this.metadata = this.metadata.bind(this);
     this.search = this.search.bind(this);
     this.all = this.all.bind(this);
@@ -91,17 +87,17 @@ export class SqlRoleService extends Service<Role, string, RoleFilter> {
     this.update = this.update.bind(this);
     this.patch = this.patch.bind(this);
     this.delete = this.delete.bind(this);
-    this.map = buildMap(roleModel.attributes);
-    this.roleModuleMap = buildMap(roleModuleModel.attributes);
+    this.map = buildMap(roleModel);
+    this.roleModuleMap = buildMap(roleModuleModel);
   }
   metadata(): Attributes {
-    return roleModel.attributes;
+    return roleModel;
   }
   search(s: RoleFilter, limit?: number, offset?: number | string, fields?: string[]): Promise<SearchResult<Role>> {
     return this.find(s, limit, offset, fields);
   }
   all(): Promise<Role[]> {
-    return this.query<Role>('select * from roles order by roleId asc', undefined, this.map);
+    return this.query('select * from roles order by roleId asc', undefined, this.map);
   }
   load(id: string): Promise<Role | null> {
     const stmt = select(id, 'roles', this.primaryKeys, this.param);
@@ -125,7 +121,7 @@ export class SqlRoleService extends Service<Role, string, RoleFilter> {
   }
   insert(role: Role): Promise<number> {
     const stmts: Statement[] = [];
-    const stmt = buildToInsert(role, 'roles', roleModel.attributes, this.param);
+    const stmt = buildToInsert(role, 'roles', roleModel, this.param);
     if (!stmt) {
       return Promise.resolve(-1);
     }
@@ -135,7 +131,7 @@ export class SqlRoleService extends Service<Role, string, RoleFilter> {
   }
   update(role: Role): Promise<number> {
     const stmts: Statement[] = [];
-    const stmt = buildToUpdate(role, 'roles', roleModel.attributes, this.param);
+    const stmt = buildToUpdate(role, 'roles', roleModel, this.param);
     if (!stmt) {
       return Promise.resolve(-1);
     }
@@ -166,7 +162,7 @@ export class SqlRoleService extends Service<Role, string, RoleFilter> {
     const stmts: Statement[] = [];
     const q1 = `delete from userRoles where roleId = ${this.param(1)}`;
     stmts.push({ query: q1, params: [roleId] });
-    const s = buildToInsertBatch<UserRole>(userRoles, 'userRoles', userRoleModel.attributes, this.param);
+    const s = buildToInsertBatch<UserRole>(userRoles, 'userRoles', userRoleModel, this.param);
     if (s) {
       stmts.push(s);
     }
@@ -187,7 +183,7 @@ function insertRoleModules(stmts: Statement[], roleId: string, privileges: strin
       const ms: Module = { roleId, moduleId: i, permissions };
       return ms;
     });
-    const stmt = buildToInsertBatch(modules, 'roleModules', roleModuleModel.attributes, param);
+    const stmt = buildToInsertBatch(modules, 'roleModules', roleModuleModel, param);
     if (stmt) {
       stmts.push(stmt);
     }
