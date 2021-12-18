@@ -1,8 +1,41 @@
+import {Request, Response} from 'express';
+import {Controller, handleError, param as getParam} from 'express-ext';
 import { Attribute, Attributes } from 'onecore';
 import { buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, keys, Model, SearchResult, select, Service, Statement, StringMap } from 'query-core';
-import { Role } from './Role';
-import { RoleFilter } from './RoleFilter';
-import { roleModel } from './RoleModel';
+import { Role, RoleFilter, roleModel, RoleService } from './RoleModel';
+
+
+export class RoleController extends Controller<Role, string, RoleFilter> {
+  constructor(log: (msg: any, ctx?: any) => void, private roleService: RoleService) {
+    super(log, roleService);
+    this.all = this.all.bind(this);
+    this.assign = this.assign.bind(this);
+  }
+
+  all(req: Request, res: Response) {
+    if (this.roleService.all) {
+      this.roleService.all()
+      .then(roles => res.status(200).json(roles))
+      .catch(err => handleError(err, res, this.log));
+    } else {
+      res.status(405).end('Method Not Allowed');
+    }
+  }
+  assign(req: Request, res: Response) {
+    const id = getParam(req, res, 'id');
+    if (id) {
+      const users: string[] = req.body;
+      if (!Array.isArray(users)) {
+        res.status(400).end(`'Body must be an array`);
+      } else {
+        this.roleService.assign(id, users)
+          .then(r => res.status(200).json(r))
+          .catch(err => handleError(err, res, this.log));
+      }
+    }
+  }
+}
+
 
 export interface UserRole {
   userId?: string;

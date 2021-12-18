@@ -1,4 +1,21 @@
-import { Model } from 'onecore';
+import { Filter, Model, ResultInfo, Service } from 'onecore';
+
+export interface RoleFilter extends Filter {
+  roleId?: string;
+  roleName?: string;
+  status?: string;
+  remark?: string;
+}
+export interface Role {
+  roleId: string;
+  roleName: string;
+  status?: string;
+  remark?: string;
+  privileges?: string[];
+}
+export interface RoleService extends Service<Role, string, number | ResultInfo<Role>, RoleFilter> {
+  assign(id: string, users: string[]): Promise<number>;
+}
 
 export const roleModel: Model = {
   name: 'role',

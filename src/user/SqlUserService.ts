@@ -1,8 +1,7 @@
+import { Request, Response } from 'express';
+import { Controller, handleError, queryParam } from 'express-ext';
 import { Attribute, buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, Model, SearchResult, select, Service, Statement, StringMap } from 'query-core';
-import { User } from './User';
-import { UserFilter } from './UserFilter';
-import { userModel } from './UserModel';
-import { UserService } from './UserService';
+import { User, UserFilter, userModel, UserService } from './UserModel';
 
 export const userRoleModel: Model = {
   name: 'userRole',
@@ -20,6 +19,40 @@ export interface UserRole {
   userId?: string;
   roleId?: string;
 }
+
+export class UserController extends Controller<User, string, UserFilter> {
+  constructor(log: (msg: any, ctx?: any) => void, private userService: UserService) {
+    super(log, userService);
+    this.all = this.all.bind(this);
+    this.getUsersOfRole = this.getUsersOfRole.bind(this);
+  }
+
+  all(req: Request, res: Response) {
+    const v = req.query['roleId'];
+    if (v && v.toString().length > 0) {
+      this.userService.getUsersOfRole(v.toString())
+        .then(users => res.status(200).json(users))
+        .catch(err => handleError(err, res, this.log));
+    } else {
+      if (this.userService.all) {
+        this.userService.all()
+          .then(users => res.status(200).json(users))
+          .catch(err => handleError(err, res, this.log));
+      } else {
+        res.status(400).end('roleId is required');
+      }
+    }
+  }
+  getUsersOfRole(req: Request, res: Response) {
+    const id = queryParam(req, res, 'roleId');
+    if (id) {
+      this.userService.getUsersOfRole(id)
+        .then(users => res.status(200).json(users))
+        .catch(err => handleError(err, res, this.log));
+    }
+  }
+}
+
 export class SqlUserService extends Service<User, string, UserFilter> implements UserService {
   constructor(
     protected find: (s: UserFilter, limit?: number, offset?: number | string, fields?: string[]) => Promise<SearchResult<User>>,

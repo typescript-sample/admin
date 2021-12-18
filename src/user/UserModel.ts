@@ -1,4 +1,26 @@
-import { Model } from 'onecore';
+import { Filter, Model, ResultInfo, Service } from 'onecore';
+
+export interface UserFilter extends Filter {
+  id?: string;
+  username?: string;
+  email?: string;
+  phone?: string;
+  status?: string;
+  gender?: string;
+  title?: string;
+  position?: string;
+}
+export interface User {
+  userId: string;
+  username: string;
+  email?: string;
+  phone?: string;
+  dateOfBirth?: Date;
+  roles?: string[];
+}
+export interface UserService extends Service<User, string, number | ResultInfo<User>, UserFilter> {
+  getUsersOfRole(roleId: string): Promise<User[]>;
+}
 
 export const userModel: Model = {
   name: 'user',
