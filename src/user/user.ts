@@ -30,15 +30,18 @@ export const userModel: Attributes = {
   },
   username: {
     required: true,
-    length: 255
+    length: 255,
+    q: true
   },
   email: {
     format: 'email',
     required: true,
-    length: 120
+    length: 120,
+    q: true
   },
   displayName: {
-    length: 120
+    length: 120,
+    q: true
   },
   status: {
     match: 'equal',

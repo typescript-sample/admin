@@ -1,7 +1,7 @@
 import { json } from 'body-parser';
 import { merge } from 'config-plus';
 import dotenv from 'dotenv';
-import express from 'express';
+import express, {Request, Response} from 'express';
 import { MiddlewareLogger } from 'express-ext';
 import http from 'http';
 import { createLogger } from 'logger-core';
@@ -17,6 +17,14 @@ const conf = merge(config, process.env, env, process.env.ENV);
 const app = express();
 const logger = createLogger(conf.log);
 const middleware = new MiddlewareLogger(logger.info, conf.middleware);
+app.use((req: Request, res: Response, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3001');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS,PATCH');
+  // res.header('Access-Control-Allow-Headers', "*");
+  res.setHeader('Access-Control-Allow-Headers', 'Access-Control-Allow-Headers, Authorization, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers');
+  next();
+});
 app.use(json(), middleware.log);
 
 const pool = mysql.createPool(conf.db);

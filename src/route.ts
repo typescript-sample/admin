@@ -15,7 +15,7 @@ export function route(app: Application, ctx: ApplicationContext, isSecure: boole
 }
 
 export function insecure(app: Application, ctx: ApplicationContext) {
-  app.get('/roles', ctx.role.all);
+  app.get('/roles', ctx.role.search);
   app.post('/roles/search', ctx.role.search);
   app.get('/roles/search', ctx.role.search);
   app.get('/roles/:id', ctx.role.load);
@@ -38,7 +38,7 @@ export function secure(app: Application, ctx: ApplicationContext) {
   const readRole = ctx.authorize('role', read);
   const writeRole = ctx.authorize('role', write);
   app.put('/roles/:id/assign', writeRole, ctx.role.assign);
-  app.get('/roles', readRole, ctx.role.all);
+  app.get('/roles', readRole, ctx.role.search);
   app.post('/roles/search', readRole, ctx.role.search);
   app.get('/roles/search', readRole, ctx.role.search);
   app.get('/roles/:id', readRole, ctx.role.load);
