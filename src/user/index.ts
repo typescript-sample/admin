@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { Controller, handleError, queryParam } from 'express-ext';
 import { Attributes, Log, Search } from 'onecore';
-import { buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, DB, Model, SearchBuilder, SearchResult, select, Service, Statement } from 'query-core';
+import { buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, DB, SearchBuilder, SearchResult, select, Service, Statement } from 'query-core';
 import { User, UserFilter, userModel, UserService } from './user';
 
 export * from './user';

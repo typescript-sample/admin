@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { Controller, handleError, param as getParam } from 'express-ext';
 import { Attributes, Log, Search } from 'onecore';
-import { buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, DB, keys, Model, SearchBuilder, SearchResult, select, Service, Statement, StringMap } from 'query-core';
+import { buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, DB, SearchBuilder, SearchResult, select, Service, Statement, StringMap } from 'query-core';
 import { Role, RoleFilter, roleModel, RoleService } from './role';
 
 export * from './role';
