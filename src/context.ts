@@ -20,9 +20,9 @@ export interface ApplicationContext {
   health: HealthController;
   log: LogController;
   middleware: MiddlewareController;
+  authorize: Authorize;
   role: RoleController;
   user: UserController;
-  authorize: Authorize;
 }
 export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: Config): ApplicationContext {
   const log = new LogController(logger);
@@ -35,6 +35,6 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: 
   const role = useRoleController(logger.error, db);
   const user = useUserController(logger.error, db);
 
-  const ctx: ApplicationContext = { health, log, middleware, role, user, authorize: authorizer.authorize };
+  const ctx: ApplicationContext = { health, log, middleware, authorize: authorizer.authorize, role, user };
   return ctx;
 }
