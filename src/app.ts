@@ -27,8 +27,8 @@ pool.getConnection((err, conn) => {
   } else if (conn) {
     console.log('Connected successfully to MySQL.');
     const db = new PoolManager(pool);
-    const ctx = useContext(db, logger, middleware);
-    route(app, ctx);
+    const ctx = useContext(db, logger, middleware, conf);
+    route(app, ctx, conf.secure);
     http.createServer(app).listen(conf.port, () => {
       console.log('Start server at port ' + conf.port);
     });

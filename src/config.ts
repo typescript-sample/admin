@@ -1,5 +1,6 @@
 export const config = {
   port: 8080,
+  secure: true,
   log: {
     level: 'info',
     map: {
@@ -22,17 +23,36 @@ export const config = {
     password: 'abcd1234',
     database: 'backoffice',
     multipleStatements: true,
+  },
+  token: {
+    secret: 'secretbackoffice',
+    expires: 86400000
+  },
+  sql: {
+    permission: `
+      select distinct rm.permissions
+      from users u
+        inner join userRoles ur on u.userId = ur.userId
+        inner join roles r on ur.roleId = r.roleId
+        inner join roleModules rm on r.roleId = rm.roleId
+        inner join modules m on rm.moduleId = m.moduleId
+      where u.userId = ? and u.status = 'A' and r.status = 'A' and rm.moduleId = ? and m.status = 'A'
+      order by sequence`
   }
 };
 
 export const env = {
   sit: {
     port: 8082,
+    secure: true,
     db: {
       database: 'masterdata_sit',
     }
   },
   prd: {
-    log: false
+    secure: true,
+    middleware: {
+      log: false
+    }
   }
 };
