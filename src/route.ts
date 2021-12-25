@@ -1,9 +1,9 @@
 import { Application } from 'express';
 import multer from 'multer';
 import { del, get, patch, post, put, read, write } from 'security-express';
-import { ApplicationContext } from './context';
+import { Context } from './context';
 
-export function route(app: Application, ctx: ApplicationContext, secure: boolean): void {
+export function route(app: Application, ctx: Context, secure: boolean): void {
   const parser = multer();
   app.get('/health', ctx.health.check);
   app.patch('/log', ctx.log.config);

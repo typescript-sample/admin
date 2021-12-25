@@ -12,8 +12,8 @@ export const config = {
   middleware: {
     log: true,
     skips: 'health,log',
-    // request: 'request',
-    // response: 'response',
+    request: 'request',
+    response: 'response',
     status: 'status',
     size: 'size'
   },
@@ -25,26 +25,32 @@ export const config = {
     database: 'backoffice',
     multipleStatements: true,
   },
-  token: {
-    secret: 'secretbackoffice',
-    expires: 86400000
-  },
-  payload: {
-    id: 'id',
-    username: 'username',
-    email: 'email',
-    userType: 'userType'
-  },
-  account: {
-    displayname: 'displayName'
-  },
   auth: {
-    statusName: 'status',
+    token: {
+      secret: 'secretbackoffice',
+      expires: 86400000
+    },
     status: {
       success: 1
     },
-    sql: {
-      query: 'select userId as id, username, email, displayname, status from users where username = ?'
+    payload: {
+      id: 'id',
+      username: 'username',
+      email: 'email',
+      userType: 'userType'
+    },
+    account: {
+      displayname: 'displayName'
+    },
+    repo: {
+      statusName: 'status',
+      status: {
+        activated: 'A',
+        deactivated: 'D'
+      },
+      sql: {
+        query: 'select userId as id, username, email, displayname, status from users where username = ?'
+      }
     }
   },
   sql: {

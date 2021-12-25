@@ -1,8 +1,8 @@
-import { AuthResult, initializeStatus, PrivilegesLoader, PrivilegesReader, RepoConfig, StringMap, useAuthenticator, User, useUserRepository } from 'authen-service';
+import { AuthResult, initializeStatus, PrivilegesLoader, PrivilegesReader, SqlAuthConfig, StatusConf, StringMap, useAuthenticator, User, useUserRepository } from 'authen-service';
 import { HealthController, LogController, Logger, Middleware, MiddlewareController, resources } from 'express-ext';
 import { buildJwtError, generate, Payload, verify } from 'jsonwebtoken-plus';
 import { createChecker, DB } from 'query-core';
-import { Authorize, Authorizer, Check, Checker, PrivilegeLoader, Token, useToken } from 'security-express';
+import { Authorize, Authorizer, PrivilegeLoader, Token, useToken } from 'security-express';
 import { check } from 'types-validation';
 import { createValidator } from 'xvalidators';
 import { AuthenticationController, PrivilegeController } from './auth';
@@ -14,10 +14,7 @@ resources.check = check;
 
 export interface Config {
   cookie?: boolean;
-  token: Token;
-  payload: StringMap;
-  account: StringMap;
-  auth: RepoConfig;
+  auth: SqlAuthConfig;
   sql: {
     allPrivileges: string;
     privileges: string;
@@ -35,18 +32,19 @@ export interface Context {
   user: UserController;
 }
 export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: Config): Context {
+  const auth = conf.auth;
   const log = new LogController(logger);
   const middleware = new MiddlewareController(midLogger);
   const sqlChecker = createChecker(db);
   const health = new HealthController([sqlChecker]);
   const privilegeLoader = new PrivilegeLoader(conf.sql.permission, db.query);
-  const token = useToken<Payload>(conf.token.secret, verify, buildJwtError, conf.cookie);
+  const token = useToken<Payload>(auth.token.secret, verify, buildJwtError, conf.cookie);
   const authorizer = new Authorizer<Payload>(token, privilegeLoader.privilege, buildJwtError, true);
 
-  const status = initializeStatus(conf.auth.status);
+  const status = initializeStatus(auth.status);
   const privilegeRepository = new PrivilegesLoader(db.query, conf.sql.privileges);
-  const userRepository = useUserRepository(db, conf.auth);
-  const authenticator = useAuthenticator(status, authenticate, generate, privilegeRepository.privileges, conf.token, conf.payload, conf.account, userRepository);
+  const userRepository = useUserRepository(db, auth.repo);
+  const authenticator = useAuthenticator(status, authenticate, generate, privilegeRepository.privileges, auth.token, auth.payload, auth.account, userRepository);
   const authentication = new AuthenticationController(logger.error, authenticator.authenticate, conf.cookie);
   const privilegesLoader = new PrivilegesReader(db.query, conf.sql.allPrivileges);
   const privilege = new PrivilegeController(logger.error, privilegesLoader.privileges);
