@@ -23,6 +23,7 @@
       order by {sort}
     </if>
   </select>
+
   <select id="role">
     select *
     from roles
@@ -36,49 +37,6 @@
     <if test="q != null">
       (roleName like #{q} or roleId like #{q} or remark like #{q}) and
     </if>
-    1 = 1
-  </select>
-  <select id="test">
-    select u.userId, u.username, u.email, u.displayName
-    from users u
-    where
-    <isNotNull property="q">
-      (u.firstName like #{q} or u.lastName like #{q}
-        or u.email like N"%${q}%" or u.phone like N"%{q}%" ) and
-    </isNotNull>
-    <if test="test.password != null">
-      u.password like #{test.password} and
-    </if>
-    <if test="test.password == null">
-      u.password is null and
-    </if>
-    <if test="name!=null">
-      u.name like #{name} and
-    </if>
-    <if test="name==null">
-      u.name like 'Phuc' and
-    </if>
-    <if test="username != 'John'">
-      u.username = #{username} and
-    </if>
-    <if test=" username == 'John' ">
-      u.username like 'John' and
-    </if>
-    <isNull property="status">
-      u.status != "status" and
-    </isNull>
-    <isEqual property="test.status" value="1">
-      u.teststatus is #{test.status} and
-    </isEqual>
-    <isNotEqual property="status" value="1">
-      u.status is not "X" and
-    </isNotEqual>
-    <isNotNull property="status">
-      u.status = #{status} and
-    </isNotNull>
-    <isNotNull property="sort">
-      order by {sort} {sortType}
-    </isNotNull>
     1 = 1
   </select>
 </mapper>

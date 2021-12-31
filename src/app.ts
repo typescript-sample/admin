@@ -9,35 +9,13 @@ import http from 'http';
 import { createLogger } from 'logger-core';
 import { createPool } from 'mysql';
 import { PoolManager } from 'mysql-core';
-import { buildTemplates, correctXml, Template, TemplateManager } from 'query-templates';
+import { buildTemplates, correctXml, Template } from 'query-templates';
 import { config, env } from './config';
 import { useContext } from './context';
 import { route } from './route';
 
 dotenv.config();
 const conf = merge(config, process.env, env, process.env.ENV);
-
-export function param(i: number): string {
-  return '$' + i;
-}
-const text = fs.readFileSync('./src/query.xml', 'utf8');
-const templateManager = new TemplateManager();
-const obj = {
-  q: 'Peter',
-  // name: 'Parker',
-  username: 'Stanlee',
-  status: ['A', 'B', 'C'],
-  test: {
-    status: '1',
-    password: 'xxx'
-  }
-};
-const templates2 = buildTemplates([text], correctXml);
-const t = templates2.get('test');
-if (t) {
-  const sql2 = templateManager.build(t, obj, param);
-  console.log('t2 ' + sql2.query + JSON.stringify(sql2.params));
-}
 
 const app = express();
 const logger = createLogger(conf.log);
