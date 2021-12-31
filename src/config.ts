@@ -2,6 +2,10 @@ export const config = {
   port: 8080,
   secure: true,
   cookie: false,
+  allow: {
+    origin: 'http://localhost:3001',
+    credentials: 'true'
+  },
   log: {
     level: 'debug',
     map: {

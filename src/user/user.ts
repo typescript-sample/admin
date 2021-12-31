@@ -31,7 +31,8 @@ export const userModel: Attributes = {
   username: {
     required: true,
     length: 255,
-    q: true
+    q: true,
+    match: 'prefix'
   },
   email: {
     format: 'email',

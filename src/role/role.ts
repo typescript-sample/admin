@@ -20,18 +20,22 @@ export interface RoleService extends Service<Role, string, RoleFilter> {
 export const roleModel: Attributes = {
   roleId: {
     key: true,
-    length: 40
+    length: 40,
+    q: true
   },
   roleName: {
     required: true,
-    length: 255
+    length: 255,
+    q: true,
+    match: 'prefix'
   },
   status: {
     match: 'equal',
     length: 1
   },
   remark: {
-    length: 255
+    length: 255,
+    q: true
   },
   createdBy: {},
   createdAt: {

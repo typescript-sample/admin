@@ -17,8 +17,9 @@ export function useUserController(log: Log, db: DB, mapper?: TemplateMap, build?
 }
 
 export class UserController extends Controller<User, string, UserFilter> {
-  constructor(log: (msg: any, ctx?: any) => void, private userService: UserService) {
+  constructor(log: Log, private userService: UserService) {
     super(log, userService);
+    this.array = ['status'];
     this.all = this.all.bind(this);
     this.getUsersOfRole = this.getUsersOfRole.bind(this);
   }

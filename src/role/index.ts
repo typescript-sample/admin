@@ -19,6 +19,7 @@ export function useRoleController(log: Log, db: DB, mapper?: TemplateMap, build?
 export class RoleController extends Controller<Role, string, RoleFilter> {
   constructor(log: (msg: any, ctx?: any) => void, private roleService: RoleService) {
     super(log, roleService);
+    this.array = ['status'];
     this.all = this.all.bind(this);
     this.assign = this.assign.bind(this);
   }
