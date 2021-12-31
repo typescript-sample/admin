@@ -9,3 +9,6 @@
 - jsonwebtoken
 - jsonwebtoken-plus
 - cookie-parser: for cookie token
+
+### libraries for xml mapper (use to search users and search roles)
+- query-templates

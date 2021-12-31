@@ -9,7 +9,8 @@ import http from 'http';
 import { createLogger } from 'logger-core';
 import { createPool } from 'mysql';
 import { PoolManager } from 'mysql-core';
-import { buildTemplates, correctXml, Template } from 'query-templates';
+import { log } from 'query-core';
+import { buildTemplates, Template, trim } from 'query-templates';
 import { config, env } from './config';
 import { useContext } from './context';
 import { route } from './route';
@@ -32,10 +33,10 @@ app.use(json(), cookieParser(), middleware.log);
 let templates: Map<string, Template>|undefined;
 if (conf.template) {
   const mapper = fs.readFileSync('./src/query.xml', 'utf8');
-  templates = buildTemplates([mapper], correctXml);
+  templates = buildTemplates([mapper], trim);
 }
 const pool = createPool(conf.db);
-const db = new PoolManager(pool);
+const db = log(new PoolManager(pool), conf.log.db, logger);
 const ctx = useContext(db, logger, middleware, conf, templates);
 route(app, ctx, conf.secure);
 http.createServer(app).listen(conf.port, () => {

@@ -3,17 +3,18 @@ export const config = {
   secure: true,
   cookie: false,
   log: {
-    level: 'info',
+    level: 'debug',
     map: {
       time: '@timestamp',
       msg: 'message'
-    }
+    },
+    db: true
   },
   middleware: {
     log: true,
     skips: 'health,log',
     request: 'request',
-    // response: 'response',
+    response: '',
     status: 'status',
     size: 'size'
   },
@@ -89,12 +90,18 @@ export const config = {
 export const env = {
   sit: {
     secure: true,
+    log: {
+      db: false
+    },
     db: {
       database: 'masterdata_sit',
     }
   },
   prd: {
     secure: true,
+    log: {
+      db: false
+    },
     middleware: {
       log: false
     }
