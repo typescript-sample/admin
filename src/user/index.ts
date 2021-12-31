@@ -2,16 +2,18 @@ import { Request, Response } from 'express';
 import { Controller, handleError, queryParam } from 'express-ext';
 import { Attributes, Log, Search } from 'onecore';
 import { buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, DB, SearchBuilder, SearchResult, select, Service, Statement } from 'query-core';
+import { Build, TemplateMap, useQuery } from 'query-templates';
 import { User, UserFilter, userModel, UserService } from './user';
 
 export * from './user';
 
-export function useUserService(db: DB): UserService {
-  const builder = new SearchBuilder<User, UserFilter>(db.query, 'users', userModel, db.driver);
+export function useUserService(db: DB, mapper?: TemplateMap, build?: Build): UserService {
+  const query = useQuery('user', mapper, build, userModel, true);
+  const builder = new SearchBuilder<User, UserFilter>(db.query, 'users', userModel, db.driver, query);
   return new SqlUserService(builder.search, db);
 }
-export function useUserController(log: Log, db: DB): UserController {
-  return new UserController(log, useUserService(db));
+export function useUserController(log: Log, db: DB, mapper?: TemplateMap, build?: Build): UserController {
+  return new UserController(log, useUserService(db, mapper, build));
 }
 
 export class UserController extends Controller<User, string, UserFilter> {

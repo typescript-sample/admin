@@ -1,8 +1,9 @@
-import { AuthResult, initializeStatus, PrivilegesLoader, PrivilegesReader, SqlAuthConfig, StatusConf, StringMap, useAuthenticator, User, useUserRepository } from 'authen-service';
+import { AuthResult, initializeStatus, PrivilegesLoader, PrivilegesReader, SqlAuthConfig, useAuthenticator, User, useUserRepository } from 'authen-service';
 import { HealthController, LogController, Logger, Middleware, MiddlewareController, resources } from 'express-ext';
 import { buildJwtError, generate, Payload, verify } from 'jsonwebtoken-plus';
 import { createChecker, DB } from 'query-core';
-import { Authorize, Authorizer, PrivilegeLoader, Token, useToken } from 'security-express';
+import { TemplateMap, useTemplate } from 'query-templates';
+import { Authorize, Authorizer, PrivilegeLoader, useToken } from 'security-express';
 import { check } from 'types-validation';
 import { createValidator } from 'xvalidators';
 import { AuthenticationController, PrivilegeController } from './auth';
@@ -31,7 +32,7 @@ export interface Context {
   role: RoleController;
   user: UserController;
 }
-export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: Config): Context {
+export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: Config, mapper?: TemplateMap): Context {
   const auth = conf.auth;
   const log = new LogController(logger);
   const middleware = new MiddlewareController(midLogger);
@@ -49,8 +50,9 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: 
   const privilegesLoader = new PrivilegesReader(db.query, conf.sql.allPrivileges);
   const privilege = new PrivilegeController(logger.error, privilegesLoader.privileges);
 
-  const role = useRoleController(logger.error, db);
-  const user = useUserController(logger.error, db);
+  const build = useTemplate(mapper);
+  const role = useRoleController(logger.error, db, mapper, build);
+  const user = useUserController(logger.error, db, mapper, build);
 
   return { health, log, middleware, authorize: authorizer.authorize, authentication, privilege, role, user };
 }

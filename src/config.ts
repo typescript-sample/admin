@@ -13,7 +13,7 @@ export const config = {
     log: true,
     skips: 'health,log',
     request: 'request',
-    response: 'response',
+    // response: 'response',
     status: 'status',
     size: 'size'
   },
@@ -25,6 +25,7 @@ export const config = {
     database: 'backoffice',
     multipleStatements: true,
   },
+  template: true,
   auth: {
     token: {
       secret: 'secretbackoffice',
@@ -87,7 +88,6 @@ export const config = {
 };
 export const env = {
   sit: {
-    port: 8082,
     secure: true,
     db: {
       database: 'masterdata_sit',
