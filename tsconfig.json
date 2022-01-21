@@ -2,9 +2,9 @@
   "compileOnSave": true,
   "compilerOptions": {
     "pretty": true,
-    "target": "es6",
+    "target": "es5",
     "baseUrl": "./src",
-    "outDir": "./es6",
+    "outDir": "./es5",
     "module": "commonjs",
     "moduleResolution": "node",
     "strict": true,

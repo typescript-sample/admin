@@ -1,9 +1,8 @@
-import { json } from 'body-parser';
 import { merge } from 'config-plus';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
-import express, { Request, Response } from 'express';
-import { loadTemplates, MiddlewareLogger } from 'express-ext';
+import express, { json } from 'express';
+import { allow, loadTemplates, MiddlewareLogger } from 'express-ext';
 import http from 'http';
 import { createLogger } from 'logger-core';
 import { createPool } from 'mysql';
@@ -20,16 +19,9 @@ const conf = merge(config, process.env, env, process.env.ENV);
 const app = express();
 const logger = createLogger(conf.log);
 const middleware = new MiddlewareLogger(logger.info, conf.middleware);
-app.use((req: Request, res: Response, next) => {
-  res.header('Access-Control-Allow-Origin', conf.allow.origin);
-  res.header('Access-Control-Allow-Credentials', conf.allow.credentials);
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS,PATCH');
-  res.setHeader('Access-Control-Allow-Headers', 'Access-Control-Allow-Headers, Authorization, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers');
-  next();
-});
-app.use(json(), cookieParser(), middleware.log);
+app.use(allow(conf.allow), json(), cookieParser(), middleware.log);
 
-const templates = loadTemplates(conf.template, buildTemplates, trim);
+const templates = loadTemplates(conf.template, buildTemplates, trim, ['./src/query.xml']);
 const pool = createPool(conf.db);
 const db = log(new PoolManager(pool), conf.log.db, logger, 'sql');
 const ctx = useContext(db, logger, middleware, conf, templates);

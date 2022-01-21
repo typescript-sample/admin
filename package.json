@@ -11,7 +11,8 @@
   "keywords": [],
   "author": "",
   "dependencies": {
-    "authen-service": "0.0.3",
+    "authen-express": "^0.0.1",
+    "authen-service": "^0.0.4",
     "body-parser": "^1.19.1",
     "config-plus": "^0.0.4",
     "cookie-parser": "^1.4.6",
@@ -26,7 +27,7 @@
     "mysql-core": "^0.1.14",
     "onecore": "^0.0.27",
     "query-core": "^0.1.18",
-    "query-templates": "0.0.3",
+    "query-templates": "^0.0.4",
     "security-express": "^0.1.4",
     "types-validation": "^0.0.2",
     "xmldom": "^0.6.0",

@@ -4,7 +4,9 @@ export const config = {
   cookie: false,
   allow: {
     origin: 'http://localhost:3001',
-    credentials: 'true'
+    credentials: 'true',
+    methods: 'GET,PUT,POST,DELETE,OPTIONS,PATCH',
+    headers: 'Access-Control-Allow-Headers, Authorization, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers'
   },
   log: {
     level: 'debug',
@@ -30,7 +32,7 @@ export const config = {
     database: 'backoffice',
     multipleStatements: true,
   },
-  template: true,
+  template: false,
   auth: {
     token: {
       secret: 'secretbackoffice',
@@ -46,14 +48,14 @@ export const config = {
       userType: 'userType'
     },
     account: {
-      displayname: 'displayName'
+      displayName: 'displayname'
     },
-    repo: {
-      statusName: 'status',
-      status: {
-        activated: 'A',
-        deactivated: 'D'
-      },
+    userStatus: {
+      activated: 'A',
+      deactivated: 'D'
+    },
+    db: {
+      status: 'status',
       sql: {
         query: 'select userId as id, username, email, displayname, status from users where username = ?'
       }
