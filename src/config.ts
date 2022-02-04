@@ -24,6 +24,17 @@ export const config = {
     status: 'status',
     size: 'size'
   },
+  ldap: {
+    options: {
+      url: 'ldap://ldap.forumsys.com:389'
+    },
+    dn: 'dc=example,dc=com',
+    attributes: ['mail', 'displayName', 'uid'],
+    map: {
+      id: 'uid'
+    },
+    users: 'kaka,zinedine.zidane,gareth.bale'
+  },
   db: {
     host: '127.0.0.1',
     port: 3306,

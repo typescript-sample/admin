@@ -1,7 +1,8 @@
 import { AuthenticationController, PrivilegeController } from 'authen-express';
-import { AuthResult, initializeStatus, PrivilegeRepository, PrivilegesReader, SqlAuthConfig, useAuthenticator, User, useUserRepository } from 'authen-service';
+import { initializeStatus, PrivilegeRepository, PrivilegesReader, SqlAuthConfig, useAuthenticator, User, useUserRepository } from 'authen-service';
 import { HealthController, LogController, Logger, Middleware, MiddlewareController, resources } from 'express-ext';
 import { buildJwtError, generate, Payload, verify } from 'jsonwebtoken-plus';
+import { Conf, useLDAP } from 'ldap-plus';
 import { createChecker, DB } from 'query-core';
 import { TemplateMap, useTemplate } from 'query-templates';
 import { Authorize, Authorizer, PrivilegeLoader, useToken } from 'security-express';
@@ -14,6 +15,7 @@ resources.check = check;
 
 export interface Config {
   cookie?: boolean;
+  ldap: Conf;
   auth: SqlAuthConfig;
   sql: {
     allPrivileges: string;
@@ -44,6 +46,7 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: 
   const status = initializeStatus(auth.status);
   const privilegeRepository = new PrivilegeRepository(db.query, conf.sql.privileges);
   const userRepository = useUserRepository(db, auth);
+  const authenticate = useLDAP(conf.ldap, status);
   const authenticator = useAuthenticator(status, authenticate, generate, auth.token, auth.payload, auth.account, userRepository, privilegeRepository.privileges, auth.lockedMinutes, auth.maxPasswordFailed);
   const authentication = new AuthenticationController(logger.error, authenticator.authenticate, conf.cookie);
   const privilegesLoader = new PrivilegesReader(db.query, conf.sql.allPrivileges);
@@ -55,7 +58,9 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: 
 
   return { health, log, middleware, authorize: authorizer.authorize, authentication, privilege, role, user };
 }
+/*
 export function authenticate(user: User): Promise<AuthResult> {
   const res: AuthResult = {status: 1};
   return Promise.resolve(res);
 }
+*/
