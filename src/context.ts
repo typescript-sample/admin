@@ -58,9 +58,3 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: 
 
   return { health, log, middleware, authorize: authorizer.authorize, authentication, privilege, role, user };
 }
-/*
-export function authenticate(user: User): Promise<AuthResult> {
-  const res: AuthResult = {status: 1};
-  return Promise.resolve(res);
-}
-*/
