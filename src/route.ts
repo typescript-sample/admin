@@ -33,4 +33,9 @@ export function route(app: Application, ctx: Context, secure: boolean): void {
   put(app, '/users/:id', writeUser, ctx.user.update, secure);
   patch(app, '/users/:id', writeUser, ctx.user.patch, secure);
   del(app, '/users/:id', writeUser, ctx.user.delete, secure);
+
+  const readAuditLog = ctx.authorize('audit_log', read);
+  get(app, '/audit-logs', readAuditLog, ctx.auditLog.search, secure);
+  get(app, '/audit-logs/search', readAuditLog, ctx.auditLog.search, secure);
+  post(app, '/audit-logs/search', readAuditLog, ctx.auditLog.search, secure);
 }

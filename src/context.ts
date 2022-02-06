@@ -8,8 +8,10 @@ import { TemplateMap, useTemplate } from 'query-templates';
 import { Authorize, Authorizer, PrivilegeLoader, useToken } from 'security-express';
 import { check } from 'types-validation';
 import { createValidator } from 'xvalidators';
+import { AuditLogController, useAuditLogController } from './audit-log';
 import { RoleController, useRoleController } from './role';
 import { UserController, useUserController } from './user';
+
 resources.createValidator = createValidator;
 resources.check = check;
 
@@ -32,6 +34,7 @@ export interface Context {
   privilege: PrivilegeController;
   role: RoleController;
   user: UserController;
+  auditLog: AuditLogController;
 }
 export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: Config, mapper?: TemplateMap): Context {
   const auth = conf.auth;
@@ -56,5 +59,7 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: 
   const role = useRoleController(logger.error, db, mapper, build);
   const user = useUserController(logger.error, db, mapper, build);
 
-  return { health, log, middleware, authorize: authorizer.authorize, authentication, privilege, role, user };
+  const auditLog = useAuditLogController(logger.error, db);
+
+  return { health, log, middleware, authorize: authorizer.authorize, authentication, privilege, role, user, auditLog };
 }
