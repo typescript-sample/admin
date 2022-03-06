@@ -2,18 +2,18 @@ import { Request, Response } from 'express';
 import { Controller, handleError, param as getParam } from 'express-ext';
 import { Attributes, Log, Search } from 'onecore';
 import { buildMap, buildToDelete, buildToInsert, buildToInsertBatch, buildToUpdate, DB, SearchBuilder, SearchResult, select, Service, Statement, StringMap } from 'query-core';
-import { Build, TemplateMap, useQuery } from 'query-templates';
+import { TemplateMap, useQuery } from 'query-mappers';
 import { Role, RoleFilter, roleModel, RoleService } from './role';
 
 export * from './role';
 
-export function useRoleService(db: DB, mapper?: TemplateMap, build?: Build): RoleService {
-  const query = useQuery('role', mapper, build, roleModel, true);
+export function useRoleService(db: DB, mapper?: TemplateMap): RoleService {
+  const query = useQuery('role', mapper, roleModel, true);
   const builder = new SearchBuilder<Role, RoleFilter>(db.query, 'roles', roleModel, db.driver, query);
   return new SqlRoleService(builder.search, db);
 }
-export function useRoleController(log: Log, db: DB, mapper?: TemplateMap, build?: Build): RoleController {
-  return new RoleController(log, useRoleService(db, mapper, build));
+export function useRoleController(log: Log, db: DB, mapper?: TemplateMap): RoleController {
+  return new RoleController(log, useRoleService(db, mapper));
 }
 
 export class RoleController extends Controller<Role, string, RoleFilter> {

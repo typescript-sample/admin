@@ -8,7 +8,7 @@ import { createLogger } from 'logger-core';
 import { createPool } from 'mysql';
 import { PoolManager } from 'mysql-core';
 import { log } from 'query-core';
-import { buildTemplates, trim } from 'query-templates';
+import { buildTemplates, trim } from 'query-mappers';
 import { config, env } from './config';
 import { useContext } from './context';
 import { route } from './route';

@@ -4,7 +4,7 @@ import { HealthController, LogController, Logger, Middleware, MiddlewareControll
 import { buildJwtError, generate, Payload, verify } from 'jsonwebtoken-plus';
 import { Conf, useLDAP } from 'ldap-plus';
 import { createChecker, DB } from 'query-core';
-import { TemplateMap, useTemplate } from 'query-templates';
+import { TemplateMap } from 'query-mappers';
 import { Authorize, Authorizer, PrivilegeLoader, useToken } from 'security-express';
 import { check } from 'types-validation';
 import { createValidator } from 'xvalidators';
@@ -55,9 +55,8 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: 
   const privilegesLoader = new PrivilegesReader(db.query, conf.sql.allPrivileges);
   const privilege = new PrivilegeController(logger.error, privilegesLoader.privileges);
 
-  const build = useTemplate(mapper);
-  const role = useRoleController(logger.error, db, mapper, build);
-  const user = useUserController(logger.error, db, mapper, build);
+  const role = useRoleController(logger.error, db, mapper);
+  const user = useUserController(logger.error, db, mapper);
 
   const auditLog = useAuditLogController(logger.error, db);
 

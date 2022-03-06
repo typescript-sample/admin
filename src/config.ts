@@ -1,6 +1,6 @@
 export const config = {
   port: 8080,
-  secure: true,
+  secure: false,
   cookie: false,
   allow: {
     origin: 'http://localhost:3001',
