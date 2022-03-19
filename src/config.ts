@@ -1,9 +1,12 @@
 export const config = {
   port: 8080,
-  secure: false,
+  https: false,
+  key: './config/key.pem',
+  cert: './config/cert.pem',
+  secure: true,
   cookie: false,
   allow: {
-    origin: 'http://localhost:3001',
+    origin: 'http://localhost:3000',
     credentials: 'true',
     methods: 'GET,PUT,POST,DELETE,OPTIONS,PATCH',
     headers: 'Access-Control-Allow-Headers, Authorization, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers'

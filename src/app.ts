@@ -2,8 +2,7 @@ import { merge } from 'config-plus';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import express, { json } from 'express';
-import { allow, loadTemplates, MiddlewareLogger } from 'express-ext';
-import http from 'http';
+import { allow, loadTemplates, MiddlewareLogger, start } from 'express-ext';
 import { createLogger } from 'logger-core';
 import { createPool } from 'mysql';
 import { PoolManager } from 'mysql-core';
@@ -26,6 +25,4 @@ const pool = createPool(conf.db);
 const db = log(new PoolManager(pool), conf.log.db, logger, 'sql');
 const ctx = useContext(db, logger, middleware, conf, templates);
 route(app, ctx, conf.secure);
-http.createServer(app).listen(conf.port, () => {
-  console.log('Start server at port ' + conf.port);
-});
+start(app, conf);
