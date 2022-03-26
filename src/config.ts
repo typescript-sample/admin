@@ -3,7 +3,7 @@ export const config = {
   https: false,
   key: './config/key.pem',
   cert: './config/cert.pem',
-  secure: true,
+  secure: false,
   cookie: false,
   allow: {
     origin: 'http://localhost:3000',

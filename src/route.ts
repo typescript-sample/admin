@@ -38,4 +38,5 @@ export function route(app: Application, ctx: Context, secure: boolean): void {
   get(app, '/audit-logs', readAuditLog, ctx.auditLog.search, secure);
   get(app, '/audit-logs/search', readAuditLog, ctx.auditLog.search, secure);
   post(app, '/audit-logs/search', readAuditLog, ctx.auditLog.search, secure);
+  get(app, '/audit-logs/:id', readAuditLog, ctx.auditLog.load, secure);
 }

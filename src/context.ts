@@ -1,14 +1,14 @@
 import { AuthenticationController, PrivilegeController } from 'authen-express';
 import { initializeStatus, PrivilegeRepository, PrivilegesReader, SqlAuthConfig, useAuthenticator, User, useUserRepository } from 'authen-service';
-import { HealthController, LogController, Logger, Middleware, MiddlewareController, resources } from 'express-ext';
+import { HealthController, LogController, Logger, Middleware, MiddlewareController, resources, Search, useSearchController } from 'express-ext';
 import { buildJwtError, generate, Payload, verify } from 'jsonwebtoken-plus';
 import { Conf, useLDAP } from 'ldap-plus';
-import { createChecker, DB } from 'query-core';
+import { createChecker, DB, SearchBuilder, useGet } from 'query-core';
 import { TemplateMap } from 'query-mappers';
 import { Authorize, Authorizer, PrivilegeLoader, useToken } from 'security-express';
 import { check } from 'types-validation';
 import { createValidator } from 'xvalidators';
-import { AuditLogController, useAuditLogController } from './audit-log';
+import { AuditLog, AuditLogFilter, auditLogModel } from './audit-log';
 import { RoleController, useRoleController } from './role';
 import { UserController, useUserController } from './user';
 
@@ -34,7 +34,7 @@ export interface Context {
   privilege: PrivilegeController;
   role: RoleController;
   user: UserController;
-  auditLog: AuditLogController;
+  auditLog: Search;
 }
 export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: Config, mapper?: TemplateMap): Context {
   const auth = conf.auth;
@@ -58,7 +58,10 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: 
   const role = useRoleController(logger.error, db, mapper);
   const user = useUserController(logger.error, db, mapper);
 
-  const auditLog = useAuditLogController(logger.error, db);
+  const builder = new SearchBuilder<AuditLog, AuditLogFilter>(db.query, 'auditlog', auditLogModel, db.driver);
+  const getAuditLog = useGet('auditlog', db.query, auditLogModel, db.param);
+  const auditLog = useSearchController(logger.error, builder.search, getAuditLog, ['status'], ['timestamp']);
+  // const auditLog = useAuditLogController(logger.error, db);
 
   return { health, log, middleware, authorize: authorizer.authorize, authentication, privilege, role, user, auditLog };
 }

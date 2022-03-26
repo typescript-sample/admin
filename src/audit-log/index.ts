@@ -1,15 +1,19 @@
-import { SearchController } from 'express-ext';
+import { Search as SearchManager, SearchController, useSearchController } from 'express-ext';
 import { Log, Search } from 'onecore';
-import { DB, SearchBuilder } from 'query-core';
+import { DB, SearchBuilder, useGet } from 'query-core';
 import { AuditLog, AuditLogFilter, auditLogModel } from './audit-log';
 
-export function useAuditLogController(log: Log, db: DB): AuditLogController {
+export * from './audit-log';
+
+export function useAuditLogController(log: Log, db: DB): SearchManager {
   const builder = new SearchBuilder<AuditLog, AuditLogFilter>(db.query, 'auditlog', auditLogModel, db.driver);
-  return new AuditLogController(log, builder.search);
+  const getAuditLog = useGet('auditlog', db.query, auditLogModel, db.param);
+  return useSearchController(log, builder.search, getAuditLog, ['status'], ['timestamp']);
+  // return new AuditLogController(log, builder.search);
 }
 export class AuditLogController extends SearchController<AuditLog, AuditLogFilter> {
-  constructor(log: Log, search: Search<AuditLog, AuditLogFilter>) {
-    super(log, search);
+  constructor(log: Log, find: Search<AuditLog, AuditLogFilter>) {
+    super(log, find);
     this.array = ['status'];
     this.dates = ['timestamp'];
   }
