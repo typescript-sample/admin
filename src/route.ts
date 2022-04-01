@@ -6,6 +6,7 @@ import { Context } from './context';
 export function route(app: Application, ctx: Context, secure: boolean): void {
   const parser = multer();
   app.get('/health', ctx.health.check);
+  app.get('/healthcheck', ctx.health2.check);
   app.patch('/log', ctx.log.config);
   app.patch('/middleware', ctx.middleware.config);
   app.post('/authenticate', parser.none(), ctx.authentication.authenticate);
