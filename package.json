@@ -21,7 +21,7 @@
     "express": "^4.17.3",
     "express-ext": "^0.1.21",
     "jsonwebtoken": "^8.5.1",
-    "jsonwebtoken-plus": "0.0.7",
+    "jsonwebtoken-plus": "^0.0.7",
     "ldap-plus": "^0.0.2",
     "ldapjs": "^2.3.2",
     "logger-core": "^0.3.0",
