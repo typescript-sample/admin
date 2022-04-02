@@ -43,7 +43,7 @@ export const config = {
     port: 3306,
     user: 'root',
     password: 'abcd1234',
-    database: 'backoffice',
+    database: 'backoffice2',
     multipleStatements: true,
   },
   template: false,
