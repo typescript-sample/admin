@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-const https = require('https')
+import * as http from 'http';
+import * as https from 'https';
 
 export type HealthStatus = 'UP' | 'DOWN';
 export interface HealthMap {
@@ -14,42 +15,49 @@ export interface AnyMap {
   [key: string]: any;
 }
 export interface HttpsResult {
-  statusCode: number,
-  data?: AnyMap,
-  statusMessage: string
+  statusCode: number;
+  data?: AnyMap;
+  statusMessage: string;
 }
-
 
 export interface HealthChecker {
   name(): string;
   build(data: AnyMap, error: any): AnyMap;
   check(): Promise<AnyMap>;
 }
-function getHealth(url: string, timeout: number): Promise<AnyMap> {
+function getHealthSecure(url: string, timeout: number): Promise<AnyMap> {
   return new Promise((resolve) => {
     https.get(url, { rejectUnauthorized: false }, (res: any) => {
-      console.log('statusCode:', res.statusCode);
-      console.log('headers:', res.headers);
       let data = '';
       res.on('data', (d: any) => {
         data += d;
       });
-
       res.on('end', () => {
-        console.log(data)
-        resolve({ statusCode: res.statusCode, data: { data }, statusMessage: res.statusMessage })
+        resolve({ statusCode: res.statusCode, data, statusMessage: res.statusMessage });
       });
-
     }).on('error', (e: any) => {
-      let error: AnyMap = { statusCode: 500, statusMessage: e }
-      return error
-    })
-
-    setTimeout(() => resolve({ statusCode: 408, statusMessage: 'Time out' }), timeout)
-  })
+      return { statusCode: 500, statusMessage: e };
+    });
+    setTimeout(() => resolve({ statusCode: 408, statusMessage: 'Time out' }), timeout);
+  });
 }
-
-export class Checker2 {
+function getHealth(url: string, timeout: number): Promise<AnyMap> {
+  return new Promise((resolve) => {
+    http.get(url, (res: any) => {
+      let data = '';
+      res.on('data', (d: any) => {
+        data += d;
+      });
+      res.on('end', () => {
+        resolve({ statusCode: res.statusCode, data, statusMessage: res.statusMessage });
+      });
+    }).on('error', (e: any) => {
+      return { statusCode: 500, statusMessage: e };
+    });
+    setTimeout(() => resolve({ statusCode: 408, statusMessage: 'Time out' }), timeout);
+  });
+}
+export class ClientChecker implements HealthChecker {
   timeout: number;
   constructor(private service: string, private url: string, timeout: number) {
     this.timeout = (timeout ? timeout : 4200);
@@ -59,10 +67,15 @@ export class Checker2 {
   }
   async check(): Promise<AnyMap> {
     let obj = {} as AnyMap;
-    return getHealth(this.url, this.timeout).then(
-      r => obj = r
-    );
-
+    if (this.url.startsWith('https://')) {
+      return getHealthSecure(this.url, this.timeout).then(
+        r => obj = r
+      );
+    } else {
+      return getHealth(this.url, this.timeout).then(
+        r => obj = r
+      );
+    }
   }
   name(): string {
     return this.service;
@@ -78,23 +91,19 @@ export class Checker2 {
   }
 }
 
-
-
-
-
-export async function health(checkers: Checker2[]): Promise<Health> {
+export async function health(checkers: ClientChecker[]): Promise<Health> {
   const p: Health = { status: 'UP' };
   p.details = {};
   const sub: Health = { status: 'UP' };
   try {
     const r = await checkers[0].check();
 
-    if (r && r.statusCode == 200) {
+    if (r && r.statusCode === 200) {
       sub.status = 'UP';
     }
-    if (r && r.statusCode != 200) {
+    if (r && r.statusCode !== 200) {
       sub.status = 'DOWN';
-      sub.data = r.statusMessage
+      sub.data = r.statusMessage;
       p.status = 'DOWN';
     }
     p.details[checkers[0].name()] = { ...sub };
@@ -110,7 +119,7 @@ export async function health(checkers: Checker2[]): Promise<Health> {
 
 
 export class HealthController2 {
-  constructor(protected checkers: Checker2[]) {
+  constructor(protected checkers: ClientChecker[]) {
     this.check = this.check.bind(this);
   }
   check(req: Request, res: Response) {
