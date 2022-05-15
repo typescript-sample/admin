@@ -24,13 +24,9 @@ export class RoleController extends Controller<Role, string, RoleFilter> {
     this.assign = this.assign.bind(this);
   }
   all(req: Request, res: Response) {
-    if (this.roleService.all) {
-      this.roleService.all()
-        .then(roles => res.status(200).json(roles))
-        .catch(err => handleError(err, res, this.log));
-    } else {
-      res.status(405).end('Method Not Allowed');
-    }
+    this.roleService.all()
+      .then(roles => res.status(200).json(roles))
+      .catch(err => handleError(err, res, this.log));
   }
   assign(req: Request, res: Response) {
     const id = getParam(req, res, 'id');

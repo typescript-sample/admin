@@ -1,5 +1,5 @@
 export const config = {
-  port: 8080,
+  port: 8083,
   https: false,
   key: './config/key.pem',
   cert: './config/cert.pem',
@@ -43,7 +43,7 @@ export const config = {
     port: 3306,
     user: 'root',
     password: 'abcd1234',
-    database: 'backoffice2',
+    database: 'backoffice',
     multipleStatements: true,
   },
   template: false,

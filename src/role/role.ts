@@ -14,6 +14,7 @@ export interface Role {
   privileges?: string[];
 }
 export interface RoleService extends Service<Role, string, RoleFilter> {
+  all(): Promise<Role[]>;
   assign(id: string, users: string[]): Promise<number>;
 }
 

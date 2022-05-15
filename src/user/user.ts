@@ -19,6 +19,7 @@ export interface User {
   roles?: string[];
 }
 export interface UserService extends Service<User, string, UserFilter> {
+  all(): Promise<User[]>;
   getUsersOfRole(roleId: string): Promise<User[]>;
 }
 
