@@ -29,7 +29,7 @@ export const config = {
   },
   ldap: {
     options: {
-      url: 'ldap://ldap.forumsys.com:389'
+      url: 'ldap://fake-ldap.server.com:389'
     },
     dn: 'dc=example,dc=com',
     attributes: ['mail', 'displayName', 'uid'],
