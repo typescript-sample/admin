@@ -48,7 +48,7 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: 
 
   const status = initializeStatus(auth.status);
   const privilegeRepository = new PrivilegeRepository(db.query, conf.sql.privileges);
-  const userRepository = useUserRepository(db, auth);
+  const userRepository = useUserRepository<string, SqlAuthConfig>(db, auth);
   const authenticate = useLDAP(conf.ldap, status);
   const authenticator = useAuthenticator(status, authenticate, generate, auth.token, auth.payload, auth.account, userRepository, privilegeRepository.privileges, auth.lockedMinutes, auth.maxPasswordFailed);
   const authentication = new AuthenticationController(logger.error, authenticator.authenticate, conf.cookie);

@@ -69,11 +69,17 @@ export const config = {
       deactivated: 'D'
     },
     db: {
+      user: 'users',
+      password: 'passwords',
+      id: 'id',
+      username: 'username',
       status: 'status',
-      sql: {
-        query: 'select userId as id, username, email, displayname, status from users where username = ?'
-      }
-    }
+      successTime: '',
+      failTime: '',
+      failCount: '',
+      lockedUntilTime: '',
+    },
+    query: 'select userId as id, username, email, displayname, status from users where username = ?',
   },
   sql: {
     allPrivileges: `
