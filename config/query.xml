@@ -25,7 +25,7 @@
   </select>
 
   <select id="role">
-    select *
+    select roleId, roleName, status
     from roles
     where
     <if test="roleName != null">
