@@ -29,7 +29,7 @@ export const config = {
   },
   ldap: {
     options: {
-      url: 'ldap://fake-ldap.server.com:389'
+      url: 'ldap://ldap.forumsys.com:389'
     },
     dn: 'dc=example,dc=com',
     attributes: ['mail', 'displayName', 'uid'],
@@ -39,12 +39,7 @@ export const config = {
     users: 'kaka,zinedine.zidane,gareth.bale'
   },
   db: {
-    host: '127.0.0.1',
-    port: 3306,
-    user: 'root',
-    password: 'abcd1234',
-    database: 'backoffice',
-    multipleStatements: true,
+    connectionString: 'postgres://hmacybye:gejWxp96CNZ41TjMPVqqAGZsrrhu7nRp@satao.db.elephantsql.com/hmacybye'
   },
   template: false,
   auth: {
@@ -79,7 +74,7 @@ export const config = {
       failCount: '',
       lockedUntilTime: '',
     },
-    query: 'select userId as id, username, email, displayname, status from users where username = ?',
+    query: 'select userId as id, username, email, displayname, status from users where username = $1',
   },
   sql: {
     allPrivileges: `
@@ -100,7 +95,7 @@ export const config = {
         inner join roles r on ur.roleId = r.roleId
         inner join roleModules rm on r.roleId = rm.roleId
         inner join modules m on rm.moduleId = m.moduleId
-      where u.userId = ? and r.status = 'A' and m.status = 'A'
+      where u.userId = $1 and r.status = 'A' and m.status = 'A'
       order by sequence`,
     permission: `
       select distinct rm.permissions
@@ -109,7 +104,7 @@ export const config = {
         inner join roles r on ur.roleId = r.roleId
         inner join roleModules rm on r.roleId = rm.roleId
         inner join modules m on rm.moduleId = m.moduleId
-      where u.userId = ? and u.status = 'A' and r.status = 'A' and rm.moduleId = ? and m.status = 'A'
+      where u.userId = $1 and u.status = 'A' and r.status = 'A' and rm.moduleId = $2 and m.status = 'A'
       order by sequence`,
   }
 };

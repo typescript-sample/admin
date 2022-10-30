@@ -55,11 +55,11 @@ create table rolemodules (
 
 create table auditlog (
   id varchar(255) primary key,
-  resourcetype varchar(255),
+  resource varchar(255),
   userid varchar(255),
   ip varchar(255),
   action varchar(255),
-  timestamp timestamp,
+  time timestamp,
   status varchar(255),
   remark varchar(255)
 );
@@ -143,13 +143,10 @@ insert into rolemodules(roleid, moduleid, permissions) values ('it_support', 'ad
 insert into rolemodules(roleid, moduleid, permissions) values ('it_support', 'user', 7);
 insert into rolemodules(roleid, moduleid, permissions) values ('it_support', 'role', 7);
 insert into rolemodules(roleid, moduleid, permissions) values ('it_support', 'audit_log', 7);
-
 /*
-alter table userroles add foreign key (userid) references users (userid);
-alter table userroles add foreign key (roleid) references roles (roleid);
-
-alter table modules add foreign key (parent) references modules (moduleid);
-
-alter table rolemodules add foreign key (roleid) references roles (roleid);
-alter table rolemodules add foreign key (moduleid) references modules (moduleid);
+alter table userroles add foreign key (userid) references users (userid);
+alter table userroles add foreign key (roleid) references roles (roleid);
+alter table modules add foreign key (parent) references modules (moduleid);
+alter table rolemodules add foreign key (roleid) references roles (roleid);
+alter table rolemodules add foreign key (moduleid) references modules (moduleid);
 */
