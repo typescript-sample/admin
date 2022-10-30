@@ -59,7 +59,7 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: 
   const user = useUserController(logger.error, db, mapper);
 
   const builder = new SearchBuilder<AuditLog, AuditLogFilter>(db.query, 'auditlog', auditLogModel, db.driver);
-  const getAuditLog = useGet('auditlog', db.query, auditLogModel, db.param);
+  const getAuditLog = useGet<AuditLog, string>(db.query, 'auditlog', auditLogModel, db.param);
   const auditLog = useSearchController(logger.error, builder.search, getAuditLog, ['status'], ['timestamp']);
   // const auditLog = useAuditLogController(logger.error, db);
 
