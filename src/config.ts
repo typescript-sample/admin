@@ -39,11 +39,11 @@ export const config = {
     users: 'kaka,zinedine.zidane,gareth.bale'
   },
   db: {
-    host: '127.0.0.1',
+    host: 'b3xlz3mvmxmvbovqthbz-mysql.services.clever-cloud.com',
     port: 3306,
-    user: 'root',
-    password: 'abcd1234',
-    database: 'backoffice',
+    user: 'uoavvvqbdbvw8xhg',
+    password: '7oC90oma1uYdqBH4Fhug',
+    database: 'b3xlz3mvmxmvbovqthbz',
     multipleStatements: true,
   },
   template: false,
@@ -96,18 +96,18 @@ export const config = {
       select distinct m.moduleId as id, m.moduleName as name, m.resourceKey as resource,
         m.path, m.icon, m.parent, m.sequence, rm.permissions
       from users u
-        inner join userRoles ur on u.userId = ur.userId
+        inner join userroles ur on u.userId = ur.userId
         inner join roles r on ur.roleId = r.roleId
-        inner join roleModules rm on r.roleId = rm.roleId
+        inner join rolemodules rm on r.roleId = rm.roleId
         inner join modules m on rm.moduleId = m.moduleId
       where u.userId = ? and r.status = 'A' and m.status = 'A'
       order by sequence`,
     permission: `
       select distinct rm.permissions
       from users u
-        inner join userRoles ur on u.userId = ur.userId
+        inner join userroles ur on u.userId = ur.userId
         inner join roles r on ur.roleId = r.roleId
-        inner join roleModules rm on r.roleId = rm.roleId
+        inner join rolemodules rm on r.roleId = rm.roleId
         inner join modules m on rm.moduleId = m.moduleId
       where u.userId = ? and u.status = 'A' and r.status = 'A' and rm.moduleId = ? and m.status = 'A'
       order by sequence`,

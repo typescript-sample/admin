@@ -81,7 +81,7 @@ export class SqlUserService extends Service<User, string, UserFilter> implements
     }
     const q = `
       select u.*
-      from userRoles ur
+      from userroles ur
         inner join users u on u.userId = ur.userId
       where ur.roleId = ${this.param(1)}
       order by userId`;
@@ -104,7 +104,7 @@ export class SqlUserService extends Service<User, string, UserFilter> implements
           return null;
         }
         const user = users[0];
-        const q = `select roleId from userRoles where userId = ${this.param(1)}`;
+        const q = `select roleId from userroles where userId = ${this.param(1)}`;
         return this.query<UserRole>(q, [user.userId]).then(roles => {
           if (roles && roles.length > 0) {
             user.roles = roles.map(i => i.roleId);
@@ -129,7 +129,7 @@ export class SqlUserService extends Service<User, string, UserFilter> implements
     if (!stmt) {
       return Promise.resolve(-1);
     }
-    const query = `delete from userRoles where userId = ${this.param(1)}`;
+    const query = `delete from userroles where userId = ${this.param(1)}`;
     stmts.push({ query, params: [user.userId] });
     insertUserRoles(stmts, user.userId, user.roles, this.param);
     return this.exec(stmt.query, stmt.params);
@@ -139,7 +139,7 @@ export class SqlUserService extends Service<User, string, UserFilter> implements
   }
   delete(id: string): Promise<number> {
     const stmts: Statement[] = [];
-    const query = `delete from userRoles where userId = ${this.param(1)}`;
+    const query = `delete from userroles where userId = ${this.param(1)}`;
     stmts.push({ query, params: [id] });
     const stmt = buildToDelete(id, 'users', this.primaryKeys, this.param);
     if (!stmt) {
@@ -152,11 +152,11 @@ export class SqlUserService extends Service<User, string, UserFilter> implements
 
 function insertUserRoles(stmts: Statement[], userId: string, roles: string[] | undefined, param: (i: number) => string): Statement[] {
   if (roles && roles.length > 0) {
-    const userRoles = roles.map<UserRole>(i => {
+    const userroles = roles.map<UserRole>(i => {
       const userRole: UserRole = { userId, roleId: i };
       return userRole;
     });
-    const stmt = buildToInsertBatch(userRoles, 'userRoles', userRoleModel, param);
+    const stmt = buildToInsertBatch(userroles, 'userroles', userRoleModel, param);
     if (stmt) {
       stmts.push(stmt);
     }
