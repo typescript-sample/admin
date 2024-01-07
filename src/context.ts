@@ -30,7 +30,7 @@ export interface Context {
   log: LogController;
   middleware: MiddlewareController;
   authorize: Authorize;
-  authentication: AuthenticationController<User>;
+  authentication: AuthenticationController<User, string>;
   privilege: PrivilegeController;
   role: RoleController;
   user: UserController;
