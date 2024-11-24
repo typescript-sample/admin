@@ -39,7 +39,7 @@ export const config = {
     users: 'kaka,zinedine.zidane,gareth.bale'
   },
   db: {
-    connectionString: 'postgres://hmacybye:gejWxp96CNZ41TjMPVqqAGZsrrhu7nRp@satao.db.elephantsql.com/hmacybye'
+    connectionString: 'postgres://postgres:abcd1234@localhost/backoffice'
   },
   template: false,
   auth: {
