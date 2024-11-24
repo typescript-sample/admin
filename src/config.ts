@@ -1,80 +1,81 @@
 export const config = {
   port: 8083,
   https: false,
-  key: './config/key.pem',
-  cert: './config/cert.pem',
+  key: "./config/key.pem",
+  cert: "./config/cert.pem",
   secure: false,
   cookie: false,
   allow: {
-    origin: ['http://localhost:3000', 'http://localhost:3001'],
-    credentials: 'true',
-    methods: 'GET,PUT,POST,DELETE,OPTIONS,PATCH',
-    headers: 'Access-Control-Allow-Headers, Authorization, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers'
+    origin: ["http://localhost:3000", "http://localhost:3001"],
+    credentials: "true",
+    methods: "GET,PUT,POST,DELETE,OPTIONS,PATCH",
+    headers:
+      "Access-Control-Allow-Headers, Authorization, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
   },
   log: {
-    level: 'debug',
+    level: "debug",
     map: {
-      time: '@timestamp',
-      msg: 'message'
+      time: "@timestamp",
+      msg: "message",
     },
-    db: true
+    db: true,
   },
   middleware: {
     log: true,
-    skips: 'health,log',
-    request: 'request',
-    response: '',
-    status: 'status',
-    size: 'size'
+    skips: "health,log",
+    request: "request",
+    response: "",
+    status: "status",
+    size: "size",
   },
   ldap: {
     options: {
-      url: 'ldap://fake-ldap.server.com:389'
+      url: "ldap://fake-ldap.server.com:389",
     },
-    dn: 'dc=example,dc=com',
-    attributes: ['mail', 'displayName', 'uid'],
+    dn: "dc=example,dc=com",
+    attributes: ["mail", "displayName", "uid"],
     map: {
-      id: 'uid'
+      id: "uid",
     },
-    users: 'kaka,zinedine.zidane,gareth.bale'
+    users: "kaka,zinedine.zidane,gareth.bale",
   },
   db: {
-    connectionString: 'postgres://postgres:abcd1234@localhost/backoffice'
+    connectionString: "postgres://postgres:abcd1234@localhost/backoffice",
   },
   template: false,
   auth: {
     token: {
-      secret: 'secretbackoffice',
-      expires: 86400000
+      secret: "secretbackoffice",
+      expires: 86400000,
     },
     status: {
-      success: 1
+      success: 1,
     },
     payload: {
-      id: 'id',
-      username: 'username',
-      email: 'email',
-      userType: 'userType'
+      id: "id",
+      username: "username",
+      email: "email",
+      userType: "userType",
     },
     account: {
-      displayName: 'displayname'
+      displayName: "displayname",
     },
     userStatus: {
-      activated: 'A',
-      deactivated: 'D'
+      activated: "A",
+      deactivated: "D",
     },
     db: {
-      user: 'users',
-      password: 'passwords',
-      id: 'id',
-      username: 'username',
-      status: 'status',
-      successTime: '',
-      failTime: '',
-      failCount: '',
-      lockedUntilTime: '',
+      user: "users",
+      password: "passwords",
+      id: "id",
+      username: "username",
+      status: "status",
+      successTime: "",
+      failTime: "",
+      failCount: "",
+      lockedUntilTime: "",
     },
-    query: 'select userId as id, username, email, displayname, status from users where username = $1',
+    query: "select userId as id, username, email, displayname, status from users where username = $1",
   },
   sql: {
     allPrivileges: `
@@ -106,25 +107,25 @@ export const config = {
         inner join modules m on rm.moduleId = m.moduleId
       where u.userId = $1 and u.status = 'A' and r.status = 'A' and rm.moduleId = $2 and m.status = 'A'
       order by sequence`,
-  }
-};
+  },
+}
 export const env = {
   sit: {
     secure: true,
     log: {
-      db: false
+      db: false,
     },
     db: {
-      database: 'masterdata_sit',
-    }
+      database: "masterdata_sit",
+    },
   },
   prd: {
     secure: true,
     log: {
-      db: false
+      db: false,
     },
     middleware: {
-      log: false
-    }
-  }
-};
+      log: false,
+    },
+  },
+}
