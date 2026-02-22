@@ -1,8 +1,11 @@
 import { AuthenticationController, PrivilegeController } from "authen-express"
 import { initializeStatus, PrivilegeRepository, PrivilegesReader, SqlAuthConfig, useAuthenticator, User, useUserRepository } from "authen-service"
+import { CountryController, useCountryController } from "country"
+import { CurrencyController, useCurrencyController } from "currency"
 import { HealthController, LogController, Logger, Middleware, MiddlewareController, resources, Search, useSearchController } from "express-ext"
 import { buildJwtError, generate, Payload, verify } from "jsonwebtoken-plus"
 import { Conf, useLDAP } from "ldap-plus"
+import { LocaleController, useLocaleController } from "locale"
 import { createChecker, DB, SearchBuilder, useGet } from "query-core"
 import { TemplateMap } from "query-mappers"
 import { Authorize, Authorizer, PrivilegeLoader, useToken } from "security-express"
@@ -35,6 +38,9 @@ export interface Context {
   role: RoleController
   user: UserController
   auditLog: Search
+  locale: LocaleController
+  country: CountryController
+  currency: CurrencyController
 }
 export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: Config, mapper?: TemplateMap): Context {
   const auth = conf.auth
@@ -74,5 +80,9 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: 
   const auditLog = useSearchController(builder.search, getAuditLog, ["status"], ["timestamp"])
   // const auditLog = useAuditLogController(logger.error, db);
 
-  return { health, log, middleware, authorize: authorizer.authorize, authentication, privilege, role, user, auditLog }
+  const locale = useLocaleController(db)
+  const country = useCountryController(db)
+  const currency = useCurrencyController(db)
+
+  return { health, log, middleware, authorize: authorizer.authorize, authentication, privilege, role, user, auditLog, locale, country, currency }
 }
