@@ -6,7 +6,7 @@ export const config = {
   secure: false,
   cookie: false,
   allow: {
-    origin: ["http://localhost:3000", "http://localhost:3001"],
+    origin: ["http://localhost:3000", "http://localhost:3001", "http://192.168.2.105:3000"],
     credentials: "true",
     methods: "GET,PUT,POST,DELETE,OPTIONS,PATCH",
     headers:
