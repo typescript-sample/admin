@@ -6,15 +6,10 @@ export class Status {
   static readonly Approved = 'A'
 }
 
-export interface Locale {
-  code: string
-  name?: string
-  nativeName?: string
-  countryCode?: string
+export interface Country {
+  countryCode: string
   countryName?: string
   nativeCountryName?: string
-  dateFormat?: string
-  firstDayOfWeek?: number
   decimalSeparator?: string
   groupSeparator?: string
   currencyCode?: string
@@ -22,17 +17,12 @@ export interface Locale {
   currencyDecimalDigits?: number
   currencyPattern?: number
   currencySample?: string
+  status?: string
 }
-
-export interface LocaleFilter extends Filter {
-  code?: string
-  name?: string
-  nativeName?: string
+export interface CountryFilter extends Filter {
   countryCode?: string
   countryName?: string
   nativeCountryName?: string
-  dateFormat: string
-  firstDayOfWeek?: number
   decimalSeparator?: string
   groupSeparator?: string
   currencyCode?: string
@@ -40,38 +30,29 @@ export interface LocaleFilter extends Filter {
   currencyDecimalDigits?: number
   currencyPattern?: number
   currencySample?: string
+  status?: string
 }
 
-export interface LocaleRepository {
-  search(filter: LocaleFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Locale>>
-  load(id: string): Promise<Locale | null>
-  create(locale: Locale): Promise<number>
-  update(locale: Locale): Promise<number>
-  patch(locale: Partial<Locale>): Promise<number>
+export interface CountryRepository {
+  search(filter: CountryFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Country>>
+  load(id: string): Promise<Country | null>
+  create(country: Country): Promise<number>
+  update(country: Country): Promise<number>
+  patch(country: Partial<Country>): Promise<number>
   delete(id: string): Promise<number>
 }
-export interface LocaleService {
-  search(filter: LocaleFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Locale>>
-  load(id: string): Promise<Locale | null>
-  create(locale: Locale): Promise<number>
-  update(locale: Locale): Promise<number>
-  patch(locale: Partial<Locale>): Promise<number>
+export interface CountryService {
+  search(filter: CountryFilter, limit: number, page?: number, fields?: string[]): Promise<SearchResult<Country>>
+  load(id: string): Promise<Country | null>
+  create(country: Country): Promise<number>
+  update(country: Country): Promise<number>
+  patch(country: Partial<Country>): Promise<number>
   delete(id: string): Promise<number>
 }
 
-export const localeModel: Attributes = {
-  code: {
-    key: true,
-    length: 40,
-  },
-  name: {
-    length: 255,
-  },
-  nativeName: {
-    column: "native_name",
-    length: 255,
-  },
+export const countryModel: Attributes = {
   countryCode: {
+    key: true,
     column: "country_code",
     length: 5,
   },
@@ -82,14 +63,6 @@ export const localeModel: Attributes = {
   nativeCountryName: {
     column: "native_country_name",
     length: 255,
-  },
-  dateFormat: {
-    column: "date_format",
-    length: 14,
-  },
-  firstDayOfWeek: {
-    column: "first_day_of_week",
-    type: "integer",
   },
   decimalSeparator: {
     column: "decimal_separator",
