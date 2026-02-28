@@ -67,10 +67,12 @@ export const countryModel: Attributes = {
   decimalSeparator: {
     column: "decimal_separator",
     length: 3,
+    operator: "=",
   },
   groupSeparator: {
     column: "group_separator",
     length: 3,
+    operator: "=",
   },
   currencyCode: {
     column: "currency_code",
@@ -83,10 +85,12 @@ export const countryModel: Attributes = {
   currencyDecimalDigits: {
     column: "currency_decimal_digits",
     type: "integer",
+    operator: "=",
   },
   currencyPattern: {
     column: "currency_pattern",
     type: "integer",
+    operator: "=",
   },
   currencySample: {
     column: "currency_sample",

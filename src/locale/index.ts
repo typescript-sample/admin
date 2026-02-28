@@ -7,7 +7,7 @@ export * from "./locale"
 
 export class SqlLocaleRepository extends Repository<Locale, string, LocaleFilter> implements LocaleRepository {
   constructor(db: DB) {
-    super(db, "locales", localeModel)
+    super(db, "locale", localeModel)
   }
 }
 export class LocaleUseCase extends UseCase<Locale, string, LocaleFilter> implements LocaleService {

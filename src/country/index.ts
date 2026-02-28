@@ -7,7 +7,7 @@ export * from "./country"
 
 export class SqlCountryRepository extends Repository<Country, string, CountryFilter> implements CountryRepository {
   constructor(db: DB) {
-    super(db, "countrys", countryModel)
+    super(db, "country", countryModel)
   }
 }
 export class CountryUseCase extends UseCase<Country, string, CountryFilter> implements CountryService {

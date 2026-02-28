@@ -43,9 +43,11 @@ export const currencyModel: Attributes = {
   },
   symbol: {
     length: 6,
+    operator: "=",
   },
   decimalDigits: {
     column: "decimal_digits",
     type: "integer",
+    operator: "=",
   },
 }

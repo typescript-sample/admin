@@ -15,9 +15,9 @@ export class CountryController {
   }
   async search(req: Request, res: Response) {
     const filter = fromRequest<CountryFilter>(req, ["status"])
-    format(filter, ["publishedAt"])
+    format(filter, undefined, ["currencyDecimalDigits", "currencyPattern"])
     if (!filter.sort) {
-      filter.sort = "-publishedAt"
+      filter.sort = "countryCode"
     }
     const { limit, page, fields } = filter
     try {

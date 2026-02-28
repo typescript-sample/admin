@@ -9,7 +9,7 @@ import { PoolManager } from "pg-extension"
 import { buildTemplates, trim } from "query-mappers"
 import { config, env } from "./config"
 import { useContext } from "./context"
-import { route } from "./route"
+import { route, TokenVerifier } from "./route"
 
 dotenv.config()
 const cfg = merge(config, process.env, env, process.env.ENV)
@@ -20,6 +20,9 @@ resources.log = logger.error
 
 const middleware = new MiddlewareLogger(logger.info, cfg.middleware)
 app.use(allow(cfg.allow), json(), cookieParser(), middleware.log)
+
+const verifier = new TokenVerifier(cfg.auth.token.secret, "account", "userId", "id")
+app.use(verifier.verify)
 
 const templates = loadTemplates(cfg.template, buildTemplates, trim, ["./config/query.xml"])
 const pool = new Pool(cfg.db)

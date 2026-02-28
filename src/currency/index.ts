@@ -7,7 +7,7 @@ export * from "./currency"
 
 export class SqlCurrencyRepository extends Repository<Currency, string, CurrencyFilter> implements CurrencyRepository {
   constructor(db: DB) {
-    super(db, "currencys", currencyModel)
+    super(db, "currency", currencyModel)
   }
 }
 export class CurrencyUseCase extends UseCase<Currency, string, CurrencyFilter> implements CurrencyService {

@@ -75,38 +75,38 @@ export const config = {
       failCount: "",
       lockedUntilTime: "",
     },
-    query: "select userId as id, username, email, displayname, status from users where username = $1",
+    query: "select user_id as id, username, email, display_name as displayname, status from users where username = $1",
   },
   sql: {
     allPrivileges: `
-      select moduleId as id,
-        moduleName as name,
-        resourceKey as resource_key,
+      select module_id as id,
+        module_name as name,
+        resource_key,
         path,
         icon,
         parent,
+        actions,
         sequence
       from modules
       where status = 'A'`,
     privileges: `
-      select distinct m.moduleId as id, m.moduleName as name, m.resourceKey as resource,
-        m.path, m.icon, m.parent, m.sequence, rm.permissions
+      select distinct m.module_id as id, m.module_name as name, m.resource_key as resource,
+        m.path, m.icon, m.parent, m.sequence, rm.permissions, m.actions
       from users u
-        inner join userRoles ur on u.userId = ur.userId
-        inner join roles r on ur.roleId = r.roleId
-        inner join roleModules rm on r.roleId = rm.roleId
-        inner join modules m on rm.moduleId = m.moduleId
-      where u.userId = $1 and r.status = 'A' and m.status = 'A'
+        inner join user_roles ur on u.user_id = ur.user_id
+        inner join roles r on ur.role_id = r.role_id
+        inner join role_modules rm on r.role_id = rm.role_id
+        inner join modules m on rm.module_id = m.module_id
+      where u.user_id = $1 and r.status = 'A' and m.status = 'A'
       order by sequence`,
     permission: `
       select distinct rm.permissions
       from users u
-        inner join userRoles ur on u.userId = ur.userId
-        inner join roles r on ur.roleId = r.roleId
-        inner join roleModules rm on r.roleId = rm.roleId
-        inner join modules m on rm.moduleId = m.moduleId
-      where u.userId = $1 and u.status = 'A' and r.status = 'A' and rm.moduleId = $2 and m.status = 'A'
-      order by sequence`,
+        inner join user_roles ur on u.user_id = ur.user_id
+        inner join roles r on ur.role_id = r.role_id
+        inner join role_modules rm on r.role_id = rm.role_id
+        inner join modules m on rm.module_id = m.module_id
+      where u.user_id = $1 and u.status = 'A' and r.status = 'A' and rm.module_id = $2 and m.status = 'A'`,
   },
 }
 export const env = {

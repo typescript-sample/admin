@@ -90,14 +90,17 @@ export const localeModel: Attributes = {
   firstDayOfWeek: {
     column: "first_day_of_week",
     type: "integer",
+    operator: "=",
   },
   decimalSeparator: {
     column: "decimal_separator",
     length: 3,
+    operator: "=",
   },
   groupSeparator: {
     column: "group_separator",
     length: 3,
+    operator: "=",
   },
   currencyCode: {
     column: "currency_code",
@@ -106,14 +109,17 @@ export const localeModel: Attributes = {
   currencySymbol: {
     column: "currency_symbol",
     length: 6,
+    operator: "=",
   },
   currencyDecimalDigits: {
     column: "currency_decimal_digits",
     type: "integer",
+    operator: "=",
   },
   currencyPattern: {
     column: "currency_pattern",
     type: "integer",
+    operator: "=",
   },
   currencySample: {
     column: "currency_sample",

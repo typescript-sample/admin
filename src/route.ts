@@ -1,7 +1,32 @@
-import { Application } from "express"
+import { Application, NextFunction, Request, Response } from "express"
+import { verify } from "jsonwebtoken"
 import multer from "multer"
 import { del, get, patch, post, put, read, write } from "security-express"
 import { Context } from "./context"
+
+const prefix = "Bearer "
+export class TokenVerifier {
+  constructor(private secret: string, private account: string, private userId: string, private id: string) {
+    this.verify = this.verify.bind(this)
+  }
+  verify(req: Request, res: Response, next: NextFunction) {
+    const data = req.headers["authorization"]
+    if (data && data.startsWith(prefix)) {
+      const token = data.substring(prefix.length)
+      verify(token, this.secret, (err, decoded) => {
+        if (err) {
+          next()
+        } else {
+          res.locals[this.account] = decoded
+          res.locals[this.userId] = (decoded as any)["id"]
+          next()
+        }
+      })
+    } else {
+      next()
+    }
+  }
+}
 
 export function route(app: Application, ctx: Context, secure?: boolean): void {
   const parser = multer()
@@ -40,6 +65,26 @@ export function route(app: Application, ctx: Context, secure?: boolean): void {
   app.get("/audit-logs/search", readAuditLog, ctx.auditLog.search)
   app.get("/audit-logs/:id", readAuditLog, ctx.auditLog.load)
 
+  const readCurrency = ctx.authorize("locale", read)
+  const writeCurrency = ctx.authorize("locale", write)
+  app.post("/currencies/search", readCurrency, ctx.currency.search)
+  app.get("/currencies/search", readCurrency, ctx.currency.search)
+  app.get("/currencies/:id", readCurrency, ctx.currency.load)
+  app.post("/currencies", writeCurrency, ctx.currency.create)
+  app.put("/currencies/:id", writeCurrency, ctx.currency.update)
+  app.patch("/currencies/:id", writeCurrency, ctx.currency.patch)
+  app.delete("/currencies/:id", writeCurrency, ctx.currency.delete)
+
+  const readCountry = ctx.authorize("locale", read)
+  const writeCountry = ctx.authorize("locale", write)
+  app.post("/countries/search", readCountry, ctx.country.search)
+  app.get("/countries/search", readCountry, ctx.country.search)
+  app.get("/countries/:id", readCountry, ctx.country.load)
+  app.post("/countries", writeCountry, ctx.country.create)
+  app.put("/countries/:id", writeCountry, ctx.country.update)
+  app.patch("/countries/:id", writeCountry, ctx.country.patch)
+  app.delete("/countries/:id", writeCountry, ctx.country.delete)
+
   const readLocale = ctx.authorize("locale", read)
   const writeLocale = ctx.authorize("locale", write)
   app.post("/locales/search", readLocale, ctx.locale.search)
@@ -49,24 +94,4 @@ export function route(app: Application, ctx: Context, secure?: boolean): void {
   app.put("/locales/:id", writeLocale, ctx.locale.update)
   app.patch("/locales/:id", writeLocale, ctx.locale.patch)
   app.delete("/locales/:id", writeLocale, ctx.locale.delete)
-
-  const readCurrency = ctx.authorize("locale", read)
-  const writeCurrency = ctx.authorize("locale", write)
-  app.post("/currencies/search", readCurrency, ctx.locale.search)
-  app.get("/currencies/search", readCurrency, ctx.locale.search)
-  app.get("/currencies/:id", readCurrency, ctx.locale.load)
-  app.post("/currencies", writeCurrency, ctx.locale.create)
-  app.put("/currencies/:id", writeCurrency, ctx.locale.update)
-  app.patch("/currencies/:id", writeCurrency, ctx.locale.patch)
-  app.delete("/currencies/:id", writeCurrency, ctx.locale.delete)
-
-  const readCountry = ctx.authorize("locale", read)
-  const writeCountry = ctx.authorize("locale", write)
-  app.post("/countries/search", readCountry, ctx.locale.search)
-  app.get("/countries/search", readCountry, ctx.locale.search)
-  app.get("/countries/:id", readCountry, ctx.locale.load)
-  app.post("/countries", writeCountry, ctx.locale.create)
-  app.put("/countries/:id", writeCountry, ctx.locale.update)
-  app.patch("/countries/:id", writeCountry, ctx.locale.patch)
-  app.delete("/countries/:id", writeCountry, ctx.locale.delete)
 }

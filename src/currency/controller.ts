@@ -15,9 +15,9 @@ export class CurrencyController {
   }
   async search(req: Request, res: Response) {
     const filter = fromRequest<CurrencyFilter>(req, ["status"])
-    format(filter, ["publishedAt"])
+    format(filter, undefined, ["decimalDigits"])
     if (!filter.sort) {
-      filter.sort = "-publishedAt"
+      filter.sort = "code"
     }
     const { limit, page, fields } = filter
     try {
