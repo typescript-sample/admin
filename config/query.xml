@@ -15,6 +15,9 @@
     <if test="status != null">
       status in (#{status}) and
     </if>
+    <if test="excluding != null">
+      user_id not in (#{excluding}) and
+    </if>
     <if test="q != null">
       (username like #{q} or displayName like #{q} or email like #{q}) and
     </if>

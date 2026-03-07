@@ -1,11 +1,5 @@
 import { Attributes, Filter, SearchResult } from "onecore"
 
-export class Status {
-  static readonly Draft = 'D'
-  static readonly Submitted = 'S'
-  static readonly Approved = 'A'
-}
-
 export interface Country {
   countryCode: string
   countryName?: string

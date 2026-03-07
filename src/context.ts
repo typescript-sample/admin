@@ -42,20 +42,20 @@ export interface Context {
   country: CountryController
   currency: CurrencyController
 }
-export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: Config, mapper?: TemplateMap): Context {
-  const auth = conf.auth
+export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: Config, mapper?: TemplateMap): Context {
+  const auth = cfg.auth
   const log = new LogController(logger)
   const middleware = new MiddlewareController(midLogger)
   const sqlChecker = createChecker(db)
   const health = new HealthController([sqlChecker])
-  const privilegeLoader = new PrivilegeLoader(conf.sql.permission, db.query)
-  const token = useToken<Payload>(auth.token.secret, verify, buildJwtError, conf.cookie)
+  const privilegeLoader = new PrivilegeLoader(cfg.sql.permission, db.query)
+  const token = useToken<Payload>(auth.token.secret, verify, buildJwtError, cfg.cookie)
   const authorizer = new Authorizer<Payload>(token, privilegeLoader.privilege, buildJwtError, true)
 
   const status = initializeStatus(auth.status)
-  const privilegeRepository = new PrivilegeRepository(db.query, conf.sql.privileges)
+  const privilegeRepository = new PrivilegeRepository(db.query, cfg.sql.privileges)
   const userRepository = useUserRepository<string, SqlAuthConfig>(db, auth)
-  const authenticate = useLDAP(conf.ldap, status)
+  const authenticate = useLDAP(cfg.ldap, status)
   const authenticator = useAuthenticator(
     status,
     authenticate,
@@ -68,8 +68,8 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, conf: 
     auth.lockedMinutes,
     auth.maxPasswordFailed,
   )
-  const authentication = new AuthenticationController(logger.error, authenticator.authenticate, conf.cookie)
-  const privilegesLoader = new PrivilegesReader(db.query, conf.sql.allPrivileges)
+  const authentication = new AuthenticationController(logger.error, authenticator.authenticate, cfg.cookie)
+  const privilegesLoader = new PrivilegesReader(db.query, cfg.sql.allPrivileges)
   const privilege = new PrivilegeController(logger.error, privilegesLoader.privileges)
 
   const role = useRoleController(db, mapper)

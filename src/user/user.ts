@@ -15,14 +15,16 @@ export interface User {
   updatedAt?: Date
 }
 export interface UserFilter extends Filter {
-  id?: string
+  userId?: string
   username?: string
+  displayName: string
   email?: string
   phone?: string
   status?: string
   gender?: string
   title?: string
   position?: string
+  excluding: string[]
 }
 
 export interface UserRepository {
