@@ -178,14 +178,14 @@ insert into role_modules(role_id, module_id, permissions) values ('finance_appro
 
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('aft2KNdQhi','gareth.bale','gareth.bale@gmail.com','Gareth Bale','https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Liver-RM_%282%29_%28cropped%29.jpg/440px-Liver-RM_%282%29_%28cropped%29.jpg','A','M','0987654321','Mr','M');
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('al6TZ0p4iE','cristiano.ronaldo','cristiano.ronaldo@gmail.com','Cristiano Ronaldo','https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Cristiano_Ronaldo_2018.jpg/400px-Cristiano_Ronaldo_2018.jpg','I','M','0987654321','Mr','E');
-insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('bkbH1PHu9O','james.rodriguez','james.rodriguez@gmail.com','James Rodríguez','https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/James_Rodriguez_2018.jpg/440px-James_Rodriguez_2018.jpg','A','M','0987654321','Mr','E');
+insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('bkbH1PHu9O','james.rodriguez','james.rodriguez@gmail.com','James Rodríguez','https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/James_Rodriguez_2018.jpg/250px-James_Rodriguez_2018.jpg','A','M','0987654321','Mr','E');
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('bL7sQBeO5m','zinedine.zidane','zinedine.zidane@gmail.com','Zinedine Zidane','https://upload.wikimedia.org/wikipedia/commons/f/f3/Zinedine_Zidane_by_Tasnim_03.jpg','A','M','0987654321','Mr','E');
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('bphT4IllDy','kaka','kaka@gmail.com','Kaká','https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Kak%C3%A1_visited_Stadium_St._Petersburg.jpg/500px-Kak%C3%A1_visited_Stadium_St._Petersburg.jpg','A','M','0987654321','Mr','E');
-insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('cHGwWRCdPx','luis.figo','luis.figo@gmail.com','Luís Figo','https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/UEFA_TT_7209.jpg/440px-UEFA_TT_7209.jpg','A','M','0987654321','Mr','E');
+insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('cHGwWRCdPx','luis.figo','luis.figo@gmail.com','Luís Figo','https://upload.wikimedia.org/wikipedia/commons/f/fe/Luis_Figo-2009.jpg','A','M','0987654321','Mr','E');
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('cKAvrWUwa1','paul.pogba','paul.pogba@gmail.com','Paul Pogba','https://upload.wikimedia.org/wikipedia/commons/b/be/Harry_Maguire_2018-07-11_1.jpg','I','M','0987654321','Mr','E');
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('cSojoy4GUs','ronaldo','ronaldo@gmail.com','Ronaldo','https://upload.wikimedia.org/wikipedia/commons/c/c8/Real_Valladolid-Valencia_CF%2C_2019-05-18_%2890%29_%28cropped%29.jpg','I','M','0987654321','Mr','E');
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('dXlkg4NA9J','luka.modric','luka.modric@gmail.com','Luka Modrić','https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/ISL-HRV_%287%29.jpg/440px-ISL-HRV_%287%29.jpg','A','M','0987654321','Mr','E');
-insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('emAmlZff9p','xabi.alonso','xabi.alonso@gmail.com','Xabi Alonso','https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Xabi_Alonso_Training_2017-03_FC_Bayern_Muenchen-3_%28cropped%29.jpg/440px-Xabi_Alonso_Training_2017-03_FC_Bayern_Muenchen-3_%28cropped%29.jpg','A','M','0987654321','Mr','E');
+insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('emAmlZff9p','xabi.alonso','xabi.alonso@gmail.com','Xabi Alonso','https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Xabi_Alonso_Euro_2012_vs_France_02.jpg/250px-Xabi_Alonso_Euro_2012_vs_France_02.jpg','A','M','0987654321','Mr','E');
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('ePXNMefKJx','karim.benzema','karim.benzema@gmail.com','Karim Benzema','https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Karim_Benzema_2018.jpg/440px-Karim_Benzema_2018.jpg','A','M','0987654321','Mr','E');
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('ftMd80w4x2','sergino.dest','sergino.dest@gmail.com','Sergiño Dest','https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Sergino_Dest.jpg/440px-Sergino_Dest.jpg','I','M','0987654321','Mr','E');
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('gHZY91SouH','gerard.pique','gerard.pique@gmail.com','Gerard Piqué','https://upload.wikimedia.org/wikipedia/commons/4/4e/Gerard_Piqu%C3%A9_2018.jpg','A','M','0987654321','Mr','M');
@@ -195,17 +195,17 @@ insert into users (user_id,username,email,display_name,image_url,status,gender,p
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('hDx6jGifRZ','sergio.busquets','sergio.busquets@gmail.com','Sergio Busquets','https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Sergio_Busquets_2018.jpg/440px-Sergio_Busquets_2018.jpg','A','M','0987654321','Mr','E');
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('i4GSsUQvZa','antoine.griezmann','antoine.griezmann@gmail.com','Antoine Griezmann','https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Antoine_Griezmann_in_2018_%28cropped%29.jpg/440px-Antoine_Griezmann_in_2018_%28cropped%29.jpg','A','M','0987654321','Mr','E');
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('i5gkziUCaz','marc-andre.ter.stegen','marc-andre.ter.stegen@gmail.com','Marc-André ter Stegen','https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Marc-Andr%C3%A9_ter_Stegen.jpg/500px-Marc-Andr%C3%A9_ter_Stegen.jpg','I','M','0987654321','Mr','E');
-insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('jYz18HzzZk','miralem.pjanic','miralem.pjanic@gmail.com','Miralem Pjanić','https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/20150331_2025_AUT_BIH_2130_Miralem_Pjani%C4%87.jpg/440px-20150331_2025_AUT_BIH_2130_Miralem_Pjani%C4%87.jpg','A','M','0987654321','Mrs','M');
+insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('jYz18HzzZk','miralem.pjanic','miralem.pjanic@gmail.com','Miralem Pjanić','https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/20150331_2108_AUT_BIH_2382_%28edited%29.jpg/250px-20150331_2108_AUT_BIH_2382_%28edited%29.jpg','A','M','0987654321','Mrs','M');
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('k0Zjb3fVJC','martin.braithwaite','martin.braithwaite@gmail.com','Martin Braithwaite','https://img.a.transfermarkt.technology/portrait/header/95732-1583334177.jpg','A','M','0987654321','Mr','E');
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('kcUrdo9w3H','ousmane.dembele','ousmane.dembele@gmail.com','Ousmane Dembélé','https://upload.wikimedia.org/wikipedia/commons/7/77/Ousmane_Demb%C3%A9l%C3%A9_2018.jpg','A','M','0987654321','Ms','E');
-insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('mooFuhbZg2','riqui.puig','riqui.puig@gmail.com','Riqui Puig','https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Bar%C3%A7a_Napoli_12_%28cropped%29.jpg/440px-Bar%C3%A7a_Napoli_12_%28cropped%29.jpg','A','M','0987654321','Ms','E');
+insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('mooFuhbZg2','riqui.puig','riqui.puig@gmail.com','Riqui Puig','https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Riqui_Puig_against_Portland_Timbers_%28cropped2%29.jpg/250px-Riqui_Puig_against_Portland_Timbers_%28cropped2%29.jpg','A','M','0987654321','Ms','E');
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('mswJ9jzUwN','philip.coutinho','philip.coutinho@gmail.com','Philip Coutinho','https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Norberto_Murara_Neto_2019.jpg/440px-Norberto_Murara_Neto_2019.jpg','A','M','0987654321','Mr','E');
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('nOf40L4Qxy','victor.lindelof','victor.lindelof@gmail.com','Victor Lindelöf','https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/CSKA-MU_2017_%286%29.jpg/440px-CSKA-MU_2017_%286%29.jpg','I','M','0987654321','Mr','E');
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('oaoe13uUnW','eric.bailly','eric.bailly@gmail.com','Eric Bailly','https://upload.wikimedia.org/wikipedia/commons/c/cf/Eric_Bailly_-_ManUtd.jpg','I','M','0987654321','Mr','E');
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('omT4HgQtVz','phil.jones','phil.jones@gmail.com','Phil Jones','https://upload.wikimedia.org/wikipedia/commons/f/fa/Phil_Jones_2018-06-28_1.jpg','I','M','0987654321','Mr','E');
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('p2OVzbV5g6','edinson.cavani','edinson.cavani@gmail.com','Edinson Cavani','https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Edinson_Cavani_2018.jpg/440px-Edinson_Cavani_2018.jpg','A','M','0987654321','Mr','E');
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('pfb2pwUKVQ','juan.mata','juan.mata@gmail.com','Juan Mata','https://upload.wikimedia.org/wikipedia/commons/7/70/Ukr-Spain2015_%286%29.jpg','A','M','0987654321','Mr','E');
-insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('pvUujIKB7Y','anthony.martial','anthony.martial@gmail.com','Anthony Martial','https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Anthony_Martial_27_September_2017_cropped.jpg/440px-Anthony_Martial_27_September_2017_cropped.jpg','A','M','0987654321','Mr','E');
+insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('pvUujIKB7Y','anthony.martial','anthony.martial@gmail.com','Anthony Martial','https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Anthony-Martial-2015.jpg/250px-Anthony-Martial-2015.jpg','A','M','0987654321','Mr','E');
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('q7oK9WEitp','marcus.rashford','marcus.rashford@gmail.com','Marcus Rashford','https://upload.wikimedia.org/wikipedia/commons/5/5e/Press_Tren_CSKA_-_MU_%283%29.jpg','A','M','0987654321','Mr','E');
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('s3oiicc88g','mason.greenwood','mason.greenwood@gmail.com','Mason Greenwood','https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Mason_Greenwood.jpeg/440px-Mason_Greenwood.jpeg','A','M','0987654321','Ms','E');
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('tGBxG3ywmt','lee.grant','lee.grant@gmail.com','Lee Grant','https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/LeeGrant09.jpg/400px-LeeGrant09.jpg','A','M','0987654321','Ms','E');
@@ -213,8 +213,8 @@ insert into users (user_id,username,email,display_name,image_url,status,gender,p
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('uTWR66xW3J','keylor.navas','keylor.navas@gmail.com','Keylor Navas','https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Keylor_Navas_2018_%28cropped%29.jpg/220px-Keylor_Navas_2018_%28cropped%29.jpg','A','M','0987654321','Mr','E');
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('wodNv16WnS','achraf.hakimi','achraf.hakimi@gmail.com','Achraf Hakimi','https://upload.wikimedia.org/wikipedia/commons/9/91/Iran-Morocco_by_soccer.ru_14_%28Achraf_Hakimi%29.jpg','A','M','0987654321','Mr','E');
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('xG1GAvBRAa','presnel.kimpembe','presnel.kimpembe@gmail.com','Presnel Kimpembe','https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Presnel_Kimpembe.jpg/400px-Presnel_Kimpembe.jpg','A','M','0987654321','Mr','E');
-insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('xWH7nN5ZFe','sergio.ramos','sergio.ramos@gmail.com','Sergio Ramos','https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/FC_RB_Salzburg_versus_Real_Madrid_%28Testspiel%2C_7._August_2019%29_09.jpg/440px-FC_RB_Salzburg_versus_Real_Madrid_%28Testspiel%2C_7._August_2019%29_09.jpg','A','M','0987654321','Mr','E');
-insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('yDa4bThoP0','marquinhos','marquinhos@gmail.com','Marquinhos','https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Brasil_conquista_primeiro_ouro_ol%C3%ADmpico_nos_penaltis_1039278-20082016-_mg_4916_%28cropped%29.jpg/440px-Brasil_conquista_primeiro_ouro_ol%C3%ADmpico_nos_penaltis_1039278-20082016-_mg_4916_%28cropped%29.jpg','A','M','0987654321','Mr','E');
+insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('xWH7nN5ZFe','sergio.ramos','sergio.ramos@gmail.com','Sergio Ramos','https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Sergio_Ramos_10mar2007.jpg/500px-Sergio_Ramos_10mar2007.jpg','A','M','0987654321','Mr','E');
+insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('yDa4bThoP0','marquinhos','marquinhos@gmail.com','Marquinhos','https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/FC_Salzburg_gegen_Paris_Saint-Germain_UEFA_Champions_League_49_%28cropped%29.jpg/250px-FC_Salzburg_gegen_Paris_Saint-Germain_UEFA_Champions_League_49_%28cropped%29.jpg','A','M','0987654321','Mr','E');
 insert into users (user_id,username,email,display_name,image_url,status,gender,phone,title,position) values ('yevNmG6Q0l','marco.verratti','marco.verratti@gmail.com','Marco Verratti','https://upload.wikimedia.org/wikipedia/commons/d/d0/Kiev-PSG_%289%29.jpg','A','M','0987654321','Mr','E');
 
 update users set language = 'en', dateformat = 'd/M/yyyy';
@@ -317,6 +317,7 @@ create table country (
   country_code varchar(5) primary key,
   country_name varchar(255),
   native_country_name varchar(255),
+  date_format varchar(14),
   decimal_separator varchar(3),
   group_separator varchar(3),
   currency_code char(3),
@@ -545,7 +546,7 @@ insert into locale (code,country_code,country_name,native_country_name,"name",na
 ('he-IL','IL','Israel','ישראל','Hebrew (Israel)','עברית (ישראל)','dd/MM/yyyy',1,'.',',',2,'ILS',2,'₪ 10,000.00');
 insert into locale (code,country_code,country_name,native_country_name,"name",native_name,date_format,first_day_of_week,decimal_separator,group_separator,currency_decimal_digits,currency_code,currency_pattern,currency_sample) VALUES
 ('hi-IN','IN','India','भारत','Hindi (India)','हिंदी (भारत)','dd-MM-yyyy',2,'.',',',2,'INR',2,'रु 10,000.00'),
-('hr-BA','BA','Bosnia and Herzegovina','Bosna i Hercegovina','Croatian (Latin, Bosnia and Herzegovina)','hrvatski (Bosna i Hercegovina)','d.M.yyyy.',2,',','.',2,'BAM',3,'10.000,00 KM'),
+('hr-BA','BA','Bosnia and Herzegovina','Bosna i Hercegovina','Croatian (Latin, Bosnia and Herzegovina)','hrvatski (Bosna i Hercegovina)','d.M.yyyy',2,',','.',2,'BAM',3,'10.000,00 KM'),
 ('hr-HR','HR','Croatia','Hrvatska','Croatian (Croatia)','hrvatski (Hrvatska)','d.M.yyyy.',2,',','.',2,'HRK',3,'10.000,00 kn'),
 ('hsb-DE','DE','Germany','Němska','Upper Sorbian (Germany)','hornjoserbšćina (Němska)','d. M. yyyy',2,',','.',2,'EUR',3,'10.000,00 €'),
 ('hu-HU','HU','Hungary','Magyarország','Hungarian (Hungary)','magyar (Magyarország)','yyyy.MM.dd.',2,',',' ',2,'HUF',3,'10 000,00 Ft'),
@@ -582,7 +583,7 @@ insert into locale (code,country_code,country_name,native_country_name,"name",na
 ('moh-CA','CA','Canada','Canada','Mohawk (Mohawk)','Kanien''kéha','M/d/yyyy',1,'.',',',2,'CAD',0,'$10,000.00'),
 ('mr-IN','IN','India','भारत','Marathi (India)','मराठी (भारत)','dd-MM-yyyy',2,'.',',',2,'INR',2,'रु 10,000.00'),
 ('ms-BN','BN','Brunei Darussalam','Brunei Darussalam','Malay (Brunei Darussalam)','Bahasa Melayu (Brunei Darussalam)','dd/MM/yyyy',2,',','.',0,'BND',0,'$10.00'),
-('ms-MY','MY','Malaysia','Malaysia','Malay (Malaysia)','Bahasa Melayu (Malaysia)','dd/MM/yyyy',2,'.',',',0,'MYR',0,'RM10,000'),
+('ms-MY','MY','Malaysia','Malaysia','Malay (Malaysia)','Bahasa Melayu (Malaysia)','dd/MM/yyyy',2,'.',',',2,'MYR',0,'RM10,000'),
 ('mt-MT','MT','Malta','Malta','Maltese (Malta)','Malti (Malta)','dd/MM/yyyy',2,'.',',',2,'EUR',0,'€ 10,000.00'),
 ('nb-NO','NO','Norway','Norge','Norwegian, Bokmål (Norway)','norsk, bokmål (Norge)','dd.MM.yyyy',2,',',' ',2,'NOK',2,'kr 10 000,00'),
 ('ne-NP','NP','Nepal','नेपाल','Nepali (Nepal)','नेपाली (नेपाल)','M/d/yyyy',1,'.',',',2,'NPR',0,'रु10,000.00'),
@@ -651,10 +652,10 @@ insert into locale (code,country_code,country_name,native_country_name,"name",na
 ('ug-CN','CN','People''s Republic of China','جۇڭخۇا خەلق جۇمھۇرىيىتى','Uyghur (PRC)','ئۇيغۇرچە (جۇڭخۇا خەلق جۇمھۇرىيىتى)','yyyy-M-d',1,'.',',',2,'CNY',0,'¥10,000.00'),
 ('uk-UA','UA','Ukraine','Україна','Ukrainian (Ukraine)','українська (Україна)','dd.MM.yyyy',2,',',' ',2,'UAH',1,'10 000,00₴'),
 ('ur-PK','PK','Islamic Republic of Pakistan','پاکستان','Urdu (Islamic Republic of Pakistan)','اُردو (پاکستان)','dd/MM/yyyy',2,'.',',',2,'PKR',0,'Rs10,000.00'),
-('uz-Cyrl-UZ','UZ','Uzbekistan','Ўзбекистон Республикаси','Uzbek (Cyrillic, Uzbekistan)','Ўзбек (Ўзбекистон)','dd.MM.yyyy',2,',',' ',2,'UZS',3,'10 000,00 сўм'),
+('uz-Cyrl-UZ','UZ','Uzbekistan','Ўзбекистон Республикаси','Uzbek (Cyrillic, Uzbekistan)','Ўзбек (Ўзбекистон)','dd.MM.yyyy',2,',',' ',0,'UZS',3,'10 000,00 сўм'),
 ('uz-Latn-UZ','UZ','Uzbekistan','U''zbekiston Respublikasi','Uzbek (Latin, Uzbekistan)','U''zbek (U''zbekiston Respublikasi)','dd/MM yyyy',2,',',' ',0,'UZS',3,'10 000 so''m');
 insert into locale (code,country_code,country_name,native_country_name,"name",native_name,date_format,first_day_of_week,decimal_separator,group_separator,currency_decimal_digits,currency_code,currency_pattern,currency_sample) VALUES
-('vi-VN','VN','Vietnam','Việt Nam','Vietnamese (Vietnam)','Tiếng Việt (Việt Nam)','dd/MM/yyyy',2,',','.',2,'VND',3,'10.000,00 ₫'),
+('vi-VN','VN','Vietnam','Việt Nam','Vietnamese (Vietnam)','Tiếng Việt (Việt Nam)','dd/MM/yyyy',2,',','.',0,'VND',3,'10.000,00 ₫'),
 ('wo-SN','SN','Senegal','Sénégal','Wolof (Senegal)','Wolof (Sénégal)','dd/MM/yyyy',2,',',' ',2,'XOF',3,'10 000,00 XOF'),
 ('xh-ZA','ZA','South Africa','uMzantsi Afrika','isiXhosa (South Africa)','isiXhosa (uMzantsi Afrika)','yyyy/MM/dd',1,'.',',',2,'ZAR',2,'R 10,000.00'),
 ('yo-NG','NG','Nigeria','Nigeria','Yoruba (Nigeria)','Yoruba (Nigeria)','d/M/yyyy',1,'.',',',2,'NIO',2,'N 10,000.00'),
@@ -810,3 +811,37 @@ insert into country (country_code,country_name,native_country_name,decimal_separ
 	 ('US','United States','United States','.',',','USD','$',2,0,'$10,000.00','A'),
 	 ('UZ','Uzbekistan','U''zbekiston Respublikasi',',',' ','UZS','лв',0,3,'10 000 so''m','A'),
 	 ('ZA','South Africa','South Africa',',',' ','ZAR','R',2,2,'R 10 000.00','A');
+
+update country c
+set date_format = l.date_format, decimal_separator = l.decimal_separator, group_separator = l.group_separator
+  from locale l
+where l.country_code = c.country_code;
+
+update country c set decimal_separator = '.', group_separator = ',' where country_code = 'AF';
+update country c set decimal_separator = '.', group_separator = ',' where country_code = 'CA';
+update country c set decimal_separator = ',', group_separator = ' ' where country_code = 'ZA';
+
+update country c set date_format = 'd.M.yyyy' where country_code = 'BA';
+update country c set date_format = 'dd/MM/yyyy' where country_code = 'CA';
+update country c set date_format = 'dd.MM.yyyy' where country_code = 'CH';
+update country c set date_format = 'yyyy/M/d' where country_code = 'CN';
+update country c set date_format = 'dd.MM.yyyy' where country_code = 'DE';
+update country c set date_format = 'dd/MM/yyyy' where country_code = 'ES';
+update country c set date_format = 'dd-MM-yyyy' where country_code = 'IN';
+update country c set date_format = 'dd/MM/yyyy' where country_code = 'LU';
+update country c set date_format = 'dd/MM/yyyy' where country_code = 'MY';
+update country c set date_format = 'dd/MM/yyyy' where country_code = 'NZ';
+update country c set date_format = 'dd.MM.yyyy' where country_code = 'RU';
+update country c set date_format = 'dd.MM.yyyy' where country_code = 'UZ';
+/*
+select * from locale where country_code in('AF', 'CA', 'ZA') order by country_code;
+select * from locale where country_code in('BA', 'CA', 'CH', 'CN', 'DE', 'ES', 'IN', 'LU', 'MY', 'NZ', 'RU', 'UZ');
+
+select * from locale l where code in (
+  select a.code from locale a inner join locale b on a.country_code = b.country_code  and a.code  != b.code) 
+order by country_code, code;
+
+select distinct country_code, country_name, date_format from locale l where code in (
+  select a.code from locale a inner join locale b on a.country_code = b.country_code  and a.code  != b.code) 
+order by country_code;
+*/
