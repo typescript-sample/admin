@@ -40,7 +40,7 @@ export const config = {
     users: "kaka,zinedine.zidane,gareth.bale",
   },
   db: {
-    connectionString: "postgres://postgres:abcd1234@localhost/backoffice",
+    connectionString: "postgres://postgres:abcd1234@localhost/backoffice2",
   },
   template: false,
   auth: {
@@ -58,7 +58,8 @@ export const config = {
       userType: "userType",
     },
     account: {
-      displayName: "displayname",
+      displayName: "display_name",
+      dateFormat: "date_format",
     },
     userStatus: {
       activated: "A",
@@ -75,7 +76,7 @@ export const config = {
       failCount: "",
       lockedUntilTime: "",
     },
-    query: "select user_id as id, username, email, display_name as displayname, status from users where username = $1",
+    query: "select user_id as id, u.username, u.display_name, u.email, u.language, u.dateformat as date_format, u.status from users u where username = $1",
   },
   sql: {
     allPrivileges: `
