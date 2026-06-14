@@ -296,6 +296,20 @@ create table currency (
   decimal_digits int4,
   status char(1)
 );
+create table country (
+  country_code varchar(5) primary key,
+  country_name varchar(255),
+  native_country_name varchar(255),
+  date_format varchar(14),
+  decimal_separator varchar(3),
+  group_separator varchar(3),
+  currency_code char(3),
+  currency_symbol varchar(6),
+  currency_decimal_digits int2,
+  currency_pattern int2,
+  currency_sample varchar(40),
+  status char(1)
+);
 create table locale (
   code varchar(40) primary key,
   name varchar(255),
@@ -312,20 +326,6 @@ create table locale (
   currency_decimal_digits int2,
   currency_pattern int2,
   currency_sample varchar(40)
-);
-create table country (
-  country_code varchar(5) primary key,
-  country_name varchar(255),
-  native_country_name varchar(255),
-  date_format varchar(14),
-  decimal_separator varchar(3),
-  group_separator varchar(3),
-  currency_code char(3),
-  currency_symbol varchar(6),
-  currency_decimal_digits int2,
-  currency_pattern int2,
-  currency_sample varchar(40),
-  status char(1)
 );
 
 insert into currency (code,symbol,decimal_digits,status) values
@@ -713,7 +713,7 @@ insert into country (country_code,country_name,native_country_name,date_format,d
   ('KZ','Kazakhstan','Қазақстан','dd.MM.yyyy',',',' ','KZT','Т',2,0,'Т10 000,00','A'),
   ('LA','Lao P.D.R.','ສ.ປ.ປ. ລາວ','dd/MM/yyyy','.',',','LAK','₭',2,1,'10,000.00₭','A'),
   ('LB','Lebanon','لبنان','dd/MM/yyyy','.',',','LBP','LL',2,2,'ل.ل.‏ 10,000.00','A'),
-  ('LI','Liechtenstein','Liechtenstein','dd.MM.yyyy','.','','CHF','Fr.',2,2,'CHF 10''000.00','A'),
+  ('LI','Liechtenstein','Liechtenstein','dd.MM.yyyy','.','''','CHF','Fr.',2,2,'CHF 10''000.00','A'),
   ('LK','Sri Lanka','ශ්‍රී ලංකා','yyyy-MM-dd','.',',','LKR','රු.',2,2,'රු. 10,000.00','A'),
   ('LT','Lithuania','Lietuva','yyyy.MM.dd',',','.','LTL','Lt',2,3,'10.000,00 Lt','A'),
   ('LU','Luxembourg','Luxembourg','dd/MM/yyyy',',','.','EUR','€',2,3,'10 000,00 €','A'),
