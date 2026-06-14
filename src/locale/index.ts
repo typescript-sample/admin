@@ -1,4 +1,5 @@
-import { DB, UseCase } from "onecore"
+import { UseCase } from "onecore"
+import { DB } from "sql-core"
 import { LocaleController } from "./controller"
 import { Locale, LocaleFilter, LocaleRepository, LocaleService } from "./locale"
 import { SqlLocaleRepository } from "./repository"

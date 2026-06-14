@@ -6,7 +6,12 @@ import { Context } from "./context"
 
 const prefix = "Bearer "
 export class TokenVerifier {
-  constructor(private secret: string, private account: string, private userId: string, private id: string) {
+  constructor(
+    private secret: string,
+    private account: string,
+    private userId: string,
+    private id: string,
+  ) {
     this.verify = this.verify.bind(this)
   }
   verify(req: Request, res: Response, next: NextFunction) {
@@ -18,7 +23,7 @@ export class TokenVerifier {
           next()
         } else {
           res.locals[this.account] = decoded
-          res.locals[this.userId] = (decoded as any)["id"]
+          res.locals[this.userId] = (decoded as any)[this.id]
           next()
         }
       })
@@ -63,7 +68,6 @@ export function route(app: Application, ctx: Context, secure?: boolean): void {
   app.get("/audit-logs", readAuditLog, ctx.auditLog.search)
   app.post("/audit-logs/search", readAuditLog, ctx.auditLog.search)
   app.get("/audit-logs/search", readAuditLog, ctx.auditLog.search)
-  app.get("/audit-logs/:id", readAuditLog, ctx.auditLog.load)
 
   const readCurrency = ctx.authorize("currency", read)
   const writeCurrency = ctx.authorize("currency", write)

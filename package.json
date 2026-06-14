@@ -13,8 +13,7 @@
   "keywords": [],
   "author": "",
   "dependencies": {
-    "authen-express": "^0.0.4",
-    "authen-service": "^0.3.0",
+    "authen-service": "^0.4.4",
     "config-plus": "^0.0.4",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.4.2",
