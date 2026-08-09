@@ -1,7 +1,8 @@
 import { initializeStatus, PrivilegeRepository, PrivilegesReader, SqlAuthConfig, Token, useAuthenticator, User, useUserRepository } from "authen-service"
-import { HealthController, LogController, Logger, Middleware, MiddlewareController, resources } from "express-core-web"
+import { HealthController, LogController, Logger, Middleware, MiddlewareController, resources } from "express-web-kit"
 import { buildJwtError, Payload, verify } from "jsonwebtoken-plus"
 import { Conf, useLDAP } from "ldap-plus"
+import { updateLog } from "logger-core"
 import { TemplateMap } from "query-mappers"
 import { Authorize, Authorizer, PrivilegeLoader, useToken } from "security-express"
 import { createChecker, DB, SearchBuilder, useGet } from "sql-core"
@@ -45,7 +46,7 @@ export interface Context {
 }
 export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: Config, mapper?: TemplateMap): Context {
   const auth = cfg.auth
-  const log = new LogController(logger)
+  const log = new LogController(logger, updateLog)
   const middleware = new MiddlewareController(midLogger)
   const sqlChecker = createChecker(db)
   const health = new HealthController([sqlChecker])
