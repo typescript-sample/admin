@@ -1,10 +1,9 @@
 import { initializeStatus, PrivilegeRepository, PrivilegesReader, SqlAuthConfig, Token, useAuthenticator, User, useUserRepository } from "authen-service"
 import { HealthController, LogController, Logger, Middleware, MiddlewareController, resources } from "express-web-kit"
-import { buildJwtError, Payload, verify } from "jsonwebtoken-plus"
 import { Conf, useLDAP } from "ldap-plus"
 import { updateLog } from "logger-core"
 import { TemplateMap } from "query-mappers"
-import { Authorize, Authorizer, PrivilegeLoader, useToken } from "security-express"
+import { Authorize, Authorizer, PrivilegeLoader } from "security-express"
 import { createChecker, DB, SearchBuilder, useGet } from "sql-core"
 import { check } from "types-validation"
 import { createValidator } from "validation-core"
@@ -50,9 +49,9 @@ export function useContext(db: DB, logger: Logger, midLogger: Middleware, cfg: C
   const middleware = new MiddlewareController(midLogger)
   const sqlChecker = createChecker(db)
   const health = new HealthController([sqlChecker])
+
   const privilegeLoader = new PrivilegeLoader(cfg.sql.permission, db.query)
-  const token = useToken<Payload>(cfg.token.secret, verify, buildJwtError, cfg.cookie)
-  const authorizer = new Authorizer<Payload>(token, privilegeLoader.privilege, buildJwtError, true)
+  const authorizer = new Authorizer(privilegeLoader.privilege, logger.error, true, "userId", "permissions")
 
   const status = initializeStatus(auth.status)
   const privilegeRepository = new PrivilegeRepository(db.query, cfg.sql.privileges)
